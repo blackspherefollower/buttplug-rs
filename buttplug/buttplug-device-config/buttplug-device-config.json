@@ -3065,6 +3065,30 @@
           }
         }
       }
+    },
+    "kizuna": {
+      "serial": [
+        {
+          "port": "default",
+          "baud-rate": 19200,
+          "data-bits": 8,
+          "parity": "N",
+          "stop-bits": 1
+        }
+      ],
+      "defaults": {
+        "name": {
+          "en-us": "Kizuna Smart"
+        },
+        "messages": {
+          "VibrateCmd": {
+            "FeatureCount": 1,
+            "StepCount": [
+              9
+            ]
+          }
+        }
+      }
     }
   }
 }

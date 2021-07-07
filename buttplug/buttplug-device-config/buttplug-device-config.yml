@@ -192,7 +192,7 @@ protocols:
           rx: 50300013-0023-4bd4-bbd5-a6920e4c5653
         4a300001-0023-4bd4-bbd5-a6920e4c5653: # Quake
           tx: 4a300002-0023-4bd4-bbd5-a6920e4c5653
-          rx: 4a300003-0023-4bd4-bbd5-a6920e4c5653          
+          rx: 4a300003-0023-4bd4-bbd5-a6920e4c5653
     defaults:
       name:
         en-us: Lovense Device
@@ -281,7 +281,7 @@ protocols:
             StepCount:
               - 20
               - 20
-          BatteryLevelCmd: {}          
+          BatteryLevelCmd: {}
   lovense-connect-service:
     lovense-connect-service:
       exists: true
@@ -2036,7 +2036,22 @@ protocols:
         VibrateCmd:
           FeatureCount: 1
           StepCount:
-            - 10            
+            - 10
+  kizuna:
+    serial:
+      - port: default
+        baud-rate: 19200
+        data-bits: 8
+        parity: N
+        stop-bits: 1
+    defaults:
+      name:
+        en-us: Kizuna Smart
+      messages:
+        VibrateCmd:
+          FeatureCount: 1
+          StepCount:
+            - 9
   # nintendo-joycon:
   #   hid:
   #     vendor-id: 0x057e
