@@ -44,15 +44,17 @@ use uuid::Uuid;
 pub struct BtlePlugDeviceImplCreator<T: Peripheral + 'static> {
   name: String,
   address: PeripheralId,
+  services: Vec<Uuid>,
   device: T,
   adapter: Adapter,
 }
 
 impl<T: Peripheral> BtlePlugDeviceImplCreator<T> {
-  pub fn new(name: &str, address: &PeripheralId, device: T, adapter: Adapter) -> Self {
+  pub fn new(name: &str, address: &PeripheralId, services: &Vec<Uuid>, device: T, adapter: Adapter) -> Self {
     Self {
       name: name.to_owned(),
       address: address.to_owned(),
+      services: services.to_owned(),
       device,
       adapter,
     }
@@ -68,7 +70,7 @@ impl<T: Peripheral> Debug for BtlePlugDeviceImplCreator<T> {
 #[async_trait]
 impl<T: Peripheral> ButtplugDeviceImplCreator for BtlePlugDeviceImplCreator<T> {
   fn get_specifier(&self) -> DeviceSpecifier {
-    DeviceSpecifier::BluetoothLE(BluetoothLESpecifier::new_from_device(&self.name))
+    DeviceSpecifier::BluetoothLE(BluetoothLESpecifier::new_from_device_with_services(&self.name,&self.services))
   }
 
   async fn try_create_device_impl(
@@ -295,6 +297,9 @@ impl<T: Peripheral + 'static> DeviceImplInternal for BtlePlugDeviceImpl<T> {
   ) -> BoxFuture<'static, Result<RawReading, ButtplugError>> {
     // Right now we only need read for doing a whitelist check on devices. We
     // don't care about the data we get back.
+    for (key, value) in &self.endpoints {
+      println!("{}: {}", key, value);
+    }
     let characteristic = match self.endpoints.get(&msg.endpoint) {
       Some(chr) => chr.clone(),
       None => {

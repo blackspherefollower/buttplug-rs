@@ -85,6 +85,19 @@ impl BluetoothLESpecifier {
     // Add new services, overwrite matching services.
     self.services.extend(other.services);
   }
+
+  // Special loading for matching service advertisements
+  pub fn new_from_device_with_services(name: &str, uuids: &Vec<Uuid>) -> BluetoothLESpecifier {
+    let mut set = HashSet::new();
+    if !name.is_empty() {
+      set.insert(name.to_string());
+    }
+    uuids.iter().for_each(|uuid| { set.insert(uuid.to_string()); });
+    BluetoothLESpecifier {
+      names: set,
+      services: HashMap::new(),
+    }
+  }
 }
 
 #[derive(Deserialize, Debug, Clone)]

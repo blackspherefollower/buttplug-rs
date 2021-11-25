@@ -14,6 +14,7 @@ use crate::{
 use futures::future::BoxFuture;
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use crate::device::DeviceReadCmd;
 
 #[derive(ButtplugProtocolProperties)]
 pub struct Satisfyer {
@@ -41,11 +42,20 @@ impl ButtplugProtocol for Satisfyer {
   fn initialize(
     device_impl: Arc<DeviceImpl>,
   ) -> BoxFuture<'static, Result<Option<String>, ButtplugError>> {
-    let msg = DeviceWriteCmd::new(Endpoint::Command, vec![0x01], true);
-    let info_fut = device_impl.write_value(msg);
     Box::pin(async move {
-      info_fut.await?;
-      Ok(None)
+
+      // XXX: this isn't working...
+      let mut name = device_impl.name.clone();
+      let result = device_impl.read_value(DeviceReadCmd::new(Endpoint::Firmware, 128, 500)).await;
+      // I'm not sure why I'm getting an error here, and I'm not sure how to bubble it up prperly either.
+      if result.is_ok() {
+        name = String::from_utf8(result.unwrap().data().to_vec()).unwrap_or(device_impl.name.clone());
+      } else {
+        return Err(result.err().unwrap());
+      }
+
+      device_impl.write_value(DeviceWriteCmd::new(Endpoint::Command, vec![0x01], true)).await?;
+      Ok(Some(name))
     })
   }
 }

@@ -54,18 +54,22 @@ impl BtleplugAdapterTask {
       );
       return;
     };
+
+    if tried_addresses.contains(peripheral_id) {
+      // Already tried this one
+      return;
+    }
     if let Some(name) = properties.local_name {
       let span = info_span!(
         "btleplug enumeration",
         address = tracing::field::display(properties.address),
-        name = tracing::field::display(&name)
+        name = tracing::field::display(&name),
+        //services = tracing::field::display(properties.services)
       );
+
       let _enter = span.enter();
-      // Names are the only way we really have to test devices
-      // at the moment. Most devices don't send services on
-      // advertisement.
-      if !name.is_empty() && !tried_addresses.contains(peripheral_id)
-      //&& !connected_addresses_handler.contains_key(&properties.address)
+
+      if !name.is_empty()
       {
         let address = properties.address;
         debug!("Found new bluetooth device: {} {}", name, address);
@@ -73,23 +77,82 @@ impl BtleplugAdapterTask {
         let device_creator = Box::new(BtlePlugDeviceImplCreator::new(
           &name,
           peripheral_id,
+          &properties.services.clone(),
           peripheral.clone(),
           adapter.clone(),
         ));
 
         if self
+            .event_sender
+            .send(DeviceCommunicationEvent::DeviceFound {
+              name,
+              address: address.to_string(),
+              creator: device_creator,
+            })
+            .await
+            .is_err()
+        {
+          error!("Device manager receiver dropped, cannot send device found message.");
+        }
+      } else if !properties.services.is_empty() {
+        let address = properties.address;
+        debug!("Found new bluetooth device (services only): {} [{:?}]", properties.address, properties.services);
+        tried_addresses.push(peripheral_id.clone());
+        let device_creator = Box::new(BtlePlugDeviceImplCreator::new(
+          &name,
+          &peripheral_id,
+          &properties.services.clone(),
+          peripheral.clone(),
+          adapter.clone(),
+        ));
+
+        if self
+            .event_sender
+            .send(DeviceCommunicationEvent::DeviceFound {
+              name: String::new(),
+              address: address.to_string(),
+              creator: device_creator,
+            })
+            .await
+            .is_err()
+        {
+          error!("Device manager receiver dropped, cannot send device found message.");
+        }
+      }
+    }
+    else if !properties.services.is_empty()
+    {
+      let span = info_span!(
+        "btleplug enumeration",
+        name = tracing::field::display("None"),
+        address = tracing::field::display(properties.address),
+        //services = tracing::field::display(properties.services)
+      );
+      let _enter = span.enter();
+      let address = properties.address;
+      debug!("Found new bluetooth device (services only): {} [{:?}]", properties.address, properties.services);
+      tried_addresses.push(peripheral_id.clone());
+      let device_creator = Box::new(BtlePlugDeviceImplCreator::new(
+        "",
+        &peripheral_id,
+        &properties.services.clone(),
+        peripheral.clone(),
+        adapter.clone(),
+      ));
+
+      if self
           .event_sender
           .send(DeviceCommunicationEvent::DeviceFound {
-            name,
+            name: String::new(),
             address: address.to_string(),
             creator: device_creator,
           })
           .await
           .is_err()
-        {
-          error!("Device manager receiver dropped, cannot send device found message.");
-        }
+      {
+        error!("Device manager receiver dropped, cannot send device found message.");
       }
+
     } else {
       trace!(
         "Device {} found, no advertised name, ignoring.",
