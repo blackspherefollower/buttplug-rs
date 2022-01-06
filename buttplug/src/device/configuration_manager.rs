@@ -39,6 +39,8 @@ pub struct BluetoothLESpecifier {
   pub names: HashSet<String>,
   #[serde(default, rename = "advertised-services")]
   pub advertised_services: HashSet<Uuid>,
+  #[serde(default, rename = "required-endpoints")]
+  pub required_endpoints: HashSet<Endpoint>,
   // Set of services that we may have gotten as part of the advertisement.
   pub services: HashMap<Uuid, HashMap<Endpoint, Uuid>>,
 }
@@ -90,6 +92,7 @@ impl BluetoothLESpecifier {
     BluetoothLESpecifier {
       names: name_set,
       advertised_services: service_set,
+      required_endpoints: HashSet::new(),
       services: HashMap::new(),
     }
   }
@@ -525,27 +528,32 @@ impl DeviceConfigurationManager {
   pub fn find_protocol_definitions(
     &self,
     specifier: &DeviceSpecifier,
-  ) -> Option<(bool, String, ProtocolDefinition)> {
+  ) -> Option<Vec<(bool, String, ProtocolDefinition)>> {
     debug!(
       "Looking for protocol that matches specifier: {:?}",
       specifier
     );
-    for config in self.protocol_definitions.iter() {
-      if config.value() == specifier {
+    let protocols: Vec<(bool, String, ProtocolDefinition)> = self.protocol_definitions.iter()
+        .filter(|config| config.value() == specifier)
+        .map(|config|
+                 {
         info!(
           "Found protocol {:?} for specifier {:?}.",
           config.key(),
           specifier
         );
-        return Some((
+        return (
           self.allow_raw_messages,
           config.key().clone(),
           config.value().clone(),
-        ));
+        );
       }
+    ).collect();
+    if protocols.is_empty() {
+      debug!("No protocol found for specifier {:?}.", specifier);
+      return None;
     }
-    debug!("No protocol found for specifier {:?}.", specifier);
-    None
+    Some(protocols)
   }
 
   pub fn get_protocol_config(&self, name: &str) -> Option<DeviceProtocolConfiguration> {

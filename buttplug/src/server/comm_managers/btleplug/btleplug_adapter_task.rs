@@ -62,6 +62,9 @@ impl BtleplugAdapterTask {
       return;
     };
 
+    // Handy to see the devices appear and get turned away
+    trace!("Found {:?} name={:?} services={:?}", peripheral_id, properties.local_name, properties.services);
+
     let device_name = if let Some(name) = &properties.local_name {
       name.clone()
     } else {
