@@ -117,6 +117,7 @@ impl DeviceManagerEventLoop {
         Err(e) => error!("Device errored while trying to connect: {}", e),
       }
       connecting_devices.remove(&device_address);
+      trace!("Removed device address {} from connecting list {:?}.", device_address, connecting_devices);
     }.instrument(tracing::Span::current()));
   }
 
@@ -180,15 +181,14 @@ impl DeviceManagerEventLoop {
         // device, due to how things like advertisements work. We'll filter this at the
         // DeviceManager level to make sure that even if a badly coded DCM throws multiple found
         // events, we only listen to the first one.
-        if self.connecting_devices.contains(&address) {
+        if !self.connecting_devices.insert(address.clone()) {
           info!(
             "Device {} currently trying to connect, ignoring new device event.",
             address
           );
           return;
         }
-
-        self.connecting_devices.insert(address.clone());
+        trace!("Inserted device address {} into connecting list {:?}.", address, self.connecting_devices);
 
         // Make sure the device isn't on the deny list
         if let Some(config) = self.device_user_config.get(&address) {
@@ -198,6 +198,8 @@ impl DeviceManagerEventLoop {
           );
           if let Some(true) = config.deny() {
             info!("Denied device address {} found, ignoring.", address);
+            self.connecting_devices.remove(address.as_str());
+            trace!("Removed device address {} from connecting list {:?}.", address, self.connecting_devices);
             return;
           }
         } else {
@@ -225,10 +227,12 @@ impl DeviceManagerEventLoop {
           }
         }
         if !is_allowed {
+          self.connecting_devices.remove(address.as_str());
+          trace!("Removed device address {} from connecting list {:?}.", address, self.connecting_devices);
           return;
         }
 
-        self.try_create_new_device(address, creator);
+        self.try_create_new_device(address.clone(), creator);
       }
       DeviceCommunicationEvent::DeviceManagerAdded(status) => {
         self.comm_manager_scanning_statuses.push(status);
@@ -309,10 +313,7 @@ impl DeviceManagerEventLoop {
           .get(&address)
           .expect("Index must exist to get here.")
           .value();
-        self
-          .device_map
-          .remove(&device_index)
-          .expect("Remove will always work.");
+        self.device_map.remove(&device_index);
         if self
           .server_sender
           .send(DeviceRemoved::new(device_index).into())
