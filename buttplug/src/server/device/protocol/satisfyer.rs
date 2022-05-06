@@ -5,7 +5,7 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
-use super::{ButtplugProtocol, ButtplugProtocolFactory, ButtplugProtocolCommandHandler};
+use super::{ButtplugProtocol, ButtplugProtocolFactory, ButtplugProtocolCommandHandler, ButtplugDeviceMessageType::ScalarCmd};
 use crate::{
   core::messages::{self, ButtplugDeviceCommandMessageUnion, Endpoint},
   server::{
@@ -105,7 +105,13 @@ impl ButtplugProtocolFactory for SatisfyerFactory {
 
       // Now that we've initialized and constructed the device, start the update cycle to make sure
       // we don't drop the connection.
-      let last_command = Arc::new(Mutex::new(vec![0u8; 8]));
+      let mut size: usize = 8;
+      if let Some(vattr) = device_attributes.get(&ScalarCmd) {
+        if let Some(count) = vattr.feature_count {
+          size = 4 * count as usize;
+        }
+      }
+      let last_command = Arc::new(Mutex::new(vec![0u8; size]));
       let device = Satisfyer::new(device_attributes, last_command.clone());
       async_manager::spawn(async move {
         send_satisfyer_updates(hardware, last_command).await;
@@ -134,29 +140,12 @@ impl ProtocolHandler for Satisfyer {
     async move {
       let result = manager.lock().await.update_vibration(&message, true)?;
       if let Some(cmds) = result {
-        let data = if cmds.len() == 1 {
-          vec![
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-          ]
-        } else {
-          vec![
-            cmds[1].unwrap_or(0) as u8,
-            cmds[1].unwrap_or(0) as u8,
-            cmds[1].unwrap_or(0) as u8,
-            cmds[1].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-            cmds[0].unwrap_or(0) as u8,
-          ]
-        };
+        let mut data = vec![0u8; (cmds.len() * 4) as usize];
+        for (i, cmd) in cmds.iter().enumerate() {
+          for j in 0..4 {
+            data[(i * 4) + j] = cmd.unwrap_or(0) as u8
+          }
+        }
         *last_command.lock().await = data.clone();
         device
           .write_value(HardwareWriteCmd::new(Endpoint::Tx, data, false))
