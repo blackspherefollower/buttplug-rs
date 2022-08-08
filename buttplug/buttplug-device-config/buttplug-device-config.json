@@ -1021,7 +1021,8 @@
           "Magic Lotos",
           "nyx",
           "umi",
-          "funkegel"
+          "funkegel",
+          "bobi2"
         ],
         "services": {
           "78667579-7b48-43db-b8c5-7928a6b0a335": {
@@ -1107,6 +1108,24 @@
             "funkegel"
           ],
           "name": "MagicMotion Crystal"
+        },
+        {
+          "identifier": [
+            "bobi2"
+          ],
+          "name": "MagicMotion Bobi",
+          "messages": {
+            "ScalarCmd": [
+              {
+                "StepCount": 100,
+                "ActuatorType": "Vibrate"
+              },
+              {
+                "StepCount": 100,
+                "ActuatorType": "Vibrate"
+              }
+            ]
+          }
         }
       ]
     },
