@@ -138,20 +138,41 @@ impl ProtocolHandler for VorzeSA {
     }])
   }
 
-  fn handle_rotate_cmd(
+ fn handle_rotate_cmd(
     &self,
     cmds: &Vec<Option<(u32, bool)>>,
   ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-    if let Some((speed, clockwise)) = cmds[0] {
-      let data: u8 = (clockwise as u8) << 7 | (speed as u8);
+    if cmds.len() > 1 {
+      let mut data_left = 0u8;
+      let mut data_right = 0u8;
+      if let Some((speed, clockwise)) = cmds[0] {
+        data_left = (clockwise as u8) << 7 | (speed as u8);
+      }
+      if let Some((speed, clockwise)) = cmds[1] {
+        data_right = (clockwise as u8) << 7 | (speed as u8);
+      }
       Ok(vec![HardwareWriteCmd::new(
-        Endpoint::Tx,
-        vec![self.device_type as u8, VorzeActions::Rotate as u8, data],
-        true,
-      )
-      .into()])
-    } else {
-      Ok(vec![])
+          Endpoint::Tx,
+          vec![self.device_type as u8, data_left, data_right],
+          true,
+        )
+        .into()])
+    }
+    else
+    {
+      if let Some((speed, clockwise)) = cmds[0] {
+        let data: u8 = (clockwise as u8) << 7 | (speed as u8);
+        Ok(vec![HardwareWriteCmd::new(
+            Endpoint::Tx,
+            vec![self.device_type as u8, VorzeActions::Rotate as u8, data],
+            true,
+          )
+          .into()])
+      }
+      else
+      {
+        Ok(vec![])
+      }
     }
   }
 
