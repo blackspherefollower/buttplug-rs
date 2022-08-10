@@ -2774,6 +2774,40 @@ protocols:
             ActuatorType: Vibrate
           - StepCount: 3
             ActuatorType: Vibrate
+  hismith:
+    btle:
+      names:
+        - HISMITH
+      services:
+        0000ffe5-0000-1000-8000-00805f9b34fb:
+          tx: 0000ffe9-0000-1000-8000-00805f9b34fb
+        0000ff90-0000-1000-8000-00805f9b34fb:
+          rxblemodel: 0000ff96-0000-1000-8000-00805f9b34fb
+    defaults:
+      name: Hismith device
+      messages:
+        ScalarCmd:
+          - StepCount: 100
+            ActuatorType: Vibrate  # Oscillator
+    configurations:
+      - identifier:
+          - "1001"
+        name: Hismith Sex Machine
+      - identifier:
+          - "1002"
+        name: Hismith Pro Traveler
+      - identifier:
+          - "1003"
+        name: Hismith Capsule
+      - identifier:
+          - "2001"
+        name: Hismith Thrusting Cup
+        messages:
+          ScalarCmd:
+            - StepCount: 100
+              ActuatorType: Vibrate  # Oscillator
+            - StepCount: 1
+              ActuatorType: Vibrate  # Vibrator
   # nintendo-joycon:
   #   hid:
   #     vendor-id: 0x057e
