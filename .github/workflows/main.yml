@@ -1,10 +1,6 @@
 name: Buttplug CI Build
 
-on:
-  push:
-    branches:
-      - dev
-      - master
+on: push
 
 concurrency:
   group: ${{ github.head_ref ||  github.ref }}
