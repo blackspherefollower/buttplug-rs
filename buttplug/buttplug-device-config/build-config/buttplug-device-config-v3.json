@@ -13124,7 +13124,7 @@
           "identifier": [
             "CTY508S5"
           ],
-          "name": "Sensee Dildo",
+          "name": "Sensee Voice-Interactive Female Vibrator",
           "features": [
             {
               "feature-type": "Vibrate",
@@ -13176,7 +13176,7 @@
           "identifier": [
             "PTYB22S2"
           ],
-          "name": "Moon Light Rabbit",
+          "name": "Sensee Moonlight",
           "features": [
             {
               "feature-type": "Vibrate",
@@ -13220,7 +13220,7 @@
           "identifier": [
             "PTYB22S2"
           ],
-          "name": "Sensee Suction Rabbit",
+          "name": "Sensee Dream Stick",
           "features": [
             {
               "feature-type": "Vibrate",
@@ -14088,6 +14088,12 @@
             "J-Tarian"
           ],
           "name": "JoyHub Tarian"
+        },
+        {
+          "identifier": [
+            "J-Euphoric"
+          ],
+          "name": "JoyHub Euphoric"
         },
         {
           "identifier": [

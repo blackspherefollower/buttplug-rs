@@ -8052,6 +8052,9 @@ protocols:
           - J-Tarian
         name: JoyHub Tarian
       - identifier:
+          - J-Euphoric
+        name: JoyHub Euphoric
+      - identifier:
           - J-Petalwish2
         name: JoyHub Petalwish 2
         features:
