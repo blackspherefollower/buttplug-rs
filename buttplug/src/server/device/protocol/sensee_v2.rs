@@ -5,20 +5,20 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
-
-use crate::server::device::configuration::{
-  ProtocolCommunicationSpecifier,
-  ProtocolDeviceAttributes,
-};
 use crate::{
   core::{
     errors::ButtplugDeviceError,
-    message::{ActuatorType, Endpoint},
+    message::{ActuatorType, Endpoint, FeatureType},
   },
   server::device::{
-    configuration::UserDeviceIdentifier,
+    configuration::{ProtocolCommunicationSpecifier, UserDeviceDefinition, UserDeviceIdentifier},
     hardware::{Hardware, HardwareCommand, HardwareReadCmd, HardwareWriteCmd},
-    protocol::{generic_protocol_initializer_setup, ProtocolHandler, ProtocolIdentifier, ProtocolInitializer},
+    protocol::{
+      generic_protocol_initializer_setup,
+      ProtocolHandler,
+      ProtocolIdentifier,
+      ProtocolInitializer,
+    },
   },
 };
 use async_trait::async_trait;
@@ -31,29 +31,38 @@ pub struct SenseeV2Initializer {}
 
 #[async_trait]
 impl ProtocolInitializer for SenseeV2Initializer {
-  async fn initialize(&mut self, hardware: Arc<Hardware>, attributes: &ProtocolDeviceAttributes) -> Result<Arc<dyn ProtocolHandler>, ButtplugDeviceError> {
-    let res = hardware.read_value(&HardwareReadCmd::new(Endpoint::Tx, 128, 500)).await?;
+  async fn initialize(
+    &mut self,
+    hardware: Arc<Hardware>,
+    device_definition: &UserDeviceDefinition,
+  ) -> Result<Arc<dyn ProtocolHandler>, ButtplugDeviceError> {
+    let res = hardware
+      .read_value(&HardwareReadCmd::new(Endpoint::Tx, 128, 500))
+      .await?;
     info!("Sensee model data: {:?}", res.data());
     let mut protocol = SenseeV2::default();
-    protocol.device_type = if res.data().len() >= 7 {res.data()[7] } else { 0x66 };
+    protocol.device_type = if res.data().len() >= 7 {
+      res.data()[7]
+    } else {
+      0x66
+    };
 
-    if let Some(scalars) = attributes.message_attributes().scalar_cmd() {
-      protocol.vibe_count = scalars
-          .clone()
-          .iter()
-          .filter(|x| [ActuatorType::Vibrate].contains(x.actuator_type()))
-          .count();
-      protocol.thrust_count = scalars
-          .clone()
-          .iter()
-          .filter(|x| [ActuatorType::Oscillate].contains(x.actuator_type()))
-          .count();
-      protocol.suck_count = scalars
-          .clone()
-          .iter()
-          .filter(|x| [ActuatorType::Constrict].contains(x.actuator_type()))
-          .count();
-    }
+    protocol.vibe_count = device_definition
+      .features()
+      .iter()
+      .filter(|x| [FeatureType::Vibrate].contains(x.feature_type()))
+      .count();
+    protocol.thrust_count = device_definition
+      .features()
+      .iter()
+      .filter(|x| [FeatureType::Oscillate].contains(x.feature_type()))
+      .count();
+    protocol.suck_count = device_definition
+      .features()
+      .iter()
+      .filter(|x| [FeatureType::Constrict].contains(x.feature_type()))
+      .count();
+
     Ok(Arc::new(protocol))
   }
 }
@@ -63,7 +72,7 @@ pub struct SenseeV2 {
   device_type: u8,
   vibe_count: usize,
   thrust_count: usize,
-  suck_count: usize
+  suck_count: usize,
 }
 
 fn make_cmd(dtype: u8, func: u8, cmd: Vec<u8>) -> Vec<u8> {
@@ -75,38 +84,47 @@ fn make_cmd(dtype: u8, func: u8, cmd: Vec<u8>) -> Vec<u8> {
   out.push(func); // Function code
   out.extend(cmd);
 
-  let cdc = vec![0,0];
+  let cdc = vec![0, 0];
   // ToDo: CDC not yet used
   out.extend(cdc);
 
   out
 }
 
-
 impl ProtocolHandler for SenseeV2 {
   fn keepalive_strategy(&self) -> super::ProtocolKeepaliveStrategy {
     super::ProtocolKeepaliveStrategy::RepeatLastPacketStrategy
   }
-  fn needs_full_command_set(&self) -> bool { true
+  fn needs_full_command_set(&self) -> bool {
+    true
   }
 
-  fn handle_scalar_cmd(&self, commands: &[Option<(ActuatorType, u32)>]) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-
+  fn handle_scalar_cmd(
+    &self,
+    commands: &[Option<(ActuatorType, u32)>],
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
     let vibes: Vec<(ActuatorType, u32)> = commands
-        .iter()
-        .map(|x| x.expect("Expecting all commands"))
-        .filter(|x| x.0 == ActuatorType::Vibrate).collect();
+      .iter()
+      .map(|x| x.expect("Expecting all commands"))
+      .filter(|x| x.0 == ActuatorType::Vibrate)
+      .collect();
     let thrusts: Vec<(ActuatorType, u32)> = commands
-        .iter()
-        .map(|x| x.expect("Expecting all commands"))
-        .filter(|x| x.0 == ActuatorType::Oscillate).collect();
+      .iter()
+      .map(|x| x.expect("Expecting all commands"))
+      .filter(|x| x.0 == ActuatorType::Oscillate)
+      .collect();
     let sucks: Vec<(ActuatorType, u32)> = commands
-        .iter()
-        .map(|x| x.expect("Expecting all commands"))
-        .filter(|x| x.0 == ActuatorType::Constrict).collect();
+      .iter()
+      .map(|x| x.expect("Expecting all commands"))
+      .filter(|x| x.0 == ActuatorType::Constrict)
+      .collect();
 
-    let mut data= vec![];
-    data.push(if self.vibe_count != 0 { 1} else {0} +if self.thrust_count != 0 { 1} else {0}+ if self.suck_count != 0 { 1} else {0} as u8);
+    let mut data = vec![];
+    data.push(
+      if self.vibe_count != 0 { 1 } else { 0 }
+        + if self.thrust_count != 0 { 1 } else { 0 }
+        + if self.suck_count != 0 { 1 } else { 0 } as u8,
+    );
     if self.vibe_count != 0 {
       data.push(0);
       data.push(self.vibe_count as u8);
@@ -132,7 +150,8 @@ impl ProtocolHandler for SenseeV2 {
       }
     }
 
-    Ok(vec![HardwareWriteCmd::new(Endpoint::Tx,
+    Ok(vec![HardwareWriteCmd::new(
+      Endpoint::Tx,
       make_cmd(self.device_type, 0xf1, data),
       false,
     )
