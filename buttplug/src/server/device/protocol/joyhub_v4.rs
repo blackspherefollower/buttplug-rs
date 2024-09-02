@@ -157,7 +157,7 @@ impl ProtocolHandler for JoyHubV4 {
         0x03,
         cmd1.unwrap_or((ActuatorType::Vibrate, 0)).1 as u8,
         0x00,
-        0x00,
+        cmd3.unwrap_or((ActuatorType::Vibrate, 0)).1 as u8,
         cmd2.unwrap_or((ActuatorType::Rotate, 0)).1 as u8,
         0xaa,
       ],
