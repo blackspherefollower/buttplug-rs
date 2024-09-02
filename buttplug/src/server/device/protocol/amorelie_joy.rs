@@ -5,15 +5,36 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
+use std::sync::Arc;
+use async_trait::async_trait;
 use crate::{
   core::{errors::ButtplugDeviceError, message::Endpoint},
   server::device::{
-    hardware::{HardwareCommand, HardwareWriteCmd},
-    protocol::{generic_protocol_setup, ProtocolHandler},
+    configuration::{UserDeviceDefinition, UserDeviceIdentifier,},
+    hardware::{Hardware, HardwareCommand, HardwareWriteCmd},
+    protocol::{generic_protocol_initializer_setup, ProtocolHandler, ProtocolInitializer, ProtocolIdentifier, ProtocolCommunicationSpecifier},
   },
 };
 
-generic_protocol_setup!(AmorelieJoy, "amorelie-joy");
+generic_protocol_initializer_setup!(AmorelieJoy, "amorelie-joy");
+
+
+#[derive(Default)]
+pub struct AmorelieJoyInitializer {}
+
+#[async_trait]
+impl ProtocolInitializer for AmorelieJoyInitializer {
+  async fn initialize(
+    &mut self,
+    hardware: Arc<Hardware>,
+    _: &UserDeviceDefinition,
+  ) -> Result<Arc<dyn ProtocolHandler>, ButtplugDeviceError> {
+    hardware.write_value(&HardwareWriteCmd::new(
+      Endpoint::Tx,
+      vec![0x03], false)).await?;
+    Ok(Arc::new(AmorelieJoy::default()))
+  }
+}
 
 #[derive(Default)]
 pub struct AmorelieJoy {}
@@ -25,7 +46,7 @@ impl ProtocolHandler for AmorelieJoy {
 
   fn handle_scalar_vibrate_cmd(
     &self,
-    index: u32,
+    _index: u32,
     scalar: u32,
   ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
     Ok(vec![HardwareWriteCmd::new(

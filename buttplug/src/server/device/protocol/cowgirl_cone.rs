@@ -17,9 +17,10 @@ use crate::{
       ProtocolInitializer,
     },
   },
+  util::sleep,
 };
 use async_trait::async_trait;
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 generic_protocol_initializer_setup!(CowgirlCone, "cowgirl-cone");
 
@@ -40,6 +41,7 @@ impl ProtocolInitializer for CowgirlConeInitializer {
         false,
       ))
       .await?;
+    sleep(Duration::from_millis(3000)).await;
     Ok(Arc::new(CowgirlCone::default()))
   }
 }
