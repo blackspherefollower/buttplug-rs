@@ -217,7 +217,7 @@ pub fn get_default_protocol_map() -> HashMap<String, Arc<dyn ProtocolIdentifierF
   );
   add_to_protocol_map(
     &mut map,
-    amorelie_joy::setup::AmorelieJoyIdentifierFactory ::default(),
+    amorelie_joy::setup::AmorelieJoyIdentifierFactory::default(),
   );
   add_to_protocol_map(&mut map, aneros::setup::AnerosIdentifierFactory::default());
   add_to_protocol_map(

@@ -5,19 +5,24 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
-use std::sync::Arc;
-use async_trait::async_trait;
 use crate::{
   core::{errors::ButtplugDeviceError, message::Endpoint},
   server::device::{
-    configuration::{UserDeviceDefinition, UserDeviceIdentifier,},
+    configuration::{UserDeviceDefinition, UserDeviceIdentifier},
     hardware::{Hardware, HardwareCommand, HardwareWriteCmd},
-    protocol::{generic_protocol_initializer_setup, ProtocolHandler, ProtocolInitializer, ProtocolIdentifier, ProtocolCommunicationSpecifier},
+    protocol::{
+      generic_protocol_initializer_setup,
+      ProtocolCommunicationSpecifier,
+      ProtocolHandler,
+      ProtocolIdentifier,
+      ProtocolInitializer,
+    },
   },
 };
+use async_trait::async_trait;
+use std::sync::Arc;
 
 generic_protocol_initializer_setup!(AmorelieJoy, "amorelie-joy");
-
 
 #[derive(Default)]
 pub struct AmorelieJoyInitializer {}
@@ -29,9 +34,9 @@ impl ProtocolInitializer for AmorelieJoyInitializer {
     hardware: Arc<Hardware>,
     _: &UserDeviceDefinition,
   ) -> Result<Arc<dyn ProtocolHandler>, ButtplugDeviceError> {
-    hardware.write_value(&HardwareWriteCmd::new(
-      Endpoint::Tx,
-      vec![0x03], false)).await?;
+    hardware
+      .write_value(&HardwareWriteCmd::new(Endpoint::Tx, vec![0x03], false))
+      .await?;
     Ok(Arc::new(AmorelieJoy::default()))
   }
 }
@@ -52,9 +57,9 @@ impl ProtocolHandler for AmorelieJoy {
     Ok(vec![HardwareWriteCmd::new(
       Endpoint::Tx,
       [
-        0x01,        // static header
-        0x01,        // pattern (1 = steady),
-        scalar as u8,// speed 0-100
+        0x01,         // static header
+        0x01,         // pattern (1 = steady),
+        scalar as u8, // speed 0-100
       ]
       .to_vec(),
       false,

@@ -9,28 +9,58 @@ use crate::{
   core::{errors::ButtplugDeviceError, message::Endpoint},
   server::device::{
     hardware::{HardwareCommand, HardwareWriteCmd},
-    protocol::{
-      generic_protocol_setup,
-      ProtocolHandler,
-    },
+    protocol::{generic_protocol_setup, ProtocolHandler},
   },
 };
 
 generic_protocol_setup!(SvakomJordan, "svakom-jordan");
 
 #[derive(Default)]
-struct SvakomJordan {
-}
+struct SvakomJordan {}
 
 impl ProtocolHandler for SvakomJordan {
   fn keepalive_strategy(&self) -> super::ProtocolKeepaliveStrategy {
     super::ProtocolKeepaliveStrategy::RepeatLastPacketStrategy
   }
 
-  fn handle_scalar_vibrate_cmd(&self, _index: u32, scalar: u32) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-    Ok(vec![HardwareWriteCmd::new(Endpoint::Tx, vec![0x55, 0x03, 0x00, 0x00, if scalar == 0 { 0x00 } else {0x01}, scalar as u8, 0x00], false).into()])
+  fn handle_scalar_vibrate_cmd(
+    &self,
+    _index: u32,
+    scalar: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    Ok(vec![HardwareWriteCmd::new(
+      Endpoint::Tx,
+      vec![
+        0x55,
+        0x03,
+        0x00,
+        0x00,
+        if scalar == 0 { 0x00 } else { 0x01 },
+        scalar as u8,
+        0x00,
+      ],
+      false,
+    )
+    .into()])
   }
-  fn handle_scalar_oscillate_cmd(&self, _index: u32, scalar: u32) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-    Ok(vec![HardwareWriteCmd::new(Endpoint::Tx, vec![0x55, 0x08, 0x00, 0x00, if scalar == 0 { 0x00 } else {0x01}, scalar as u8, 0x00], false).into()])
+  fn handle_scalar_oscillate_cmd(
+    &self,
+    _index: u32,
+    scalar: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    Ok(vec![HardwareWriteCmd::new(
+      Endpoint::Tx,
+      vec![
+        0x55,
+        0x08,
+        0x00,
+        0x00,
+        if scalar == 0 { 0x00 } else { 0x01 },
+        scalar as u8,
+        0x00,
+      ],
+      false,
+    )
+    .into()])
   }
 }
