@@ -7468,6 +7468,24 @@ protocols:
           services:
             0000fff0-0000-1000-8000-00805f9b34fb:
               tx: 0000fff2-0000-1000-8000-00805f9b34fb
+  sensee:
+    defaults:
+      name: Sensee Diandou Rabbit
+      features:
+        - feature-type: Vibrate
+          actuator:
+            step-range:
+              - 0
+              - 100
+            messages:
+              - ScalarCmd
+    communication:
+      - btle:
+          names:
+            - CTY222S4
+          services:
+            0000fff0-0000-1000-8000-00805f9b34fb:
+              tx: 0000fff5-0000-1000-8000-00805f9b34fb
   sensee-v2:
     defaults:
       name: Sensee Device
@@ -7530,17 +7548,6 @@ protocols:
               messages:
                 - ScalarCmd
       - identifier:
-          - CTY222S4
-        name: Sensee Diandou Rabbit
-        features:
-          - feature-type: Vibrate
-            actuator:
-              step-range:
-                - 0
-                - 100
-              messages:
-                - ScalarCmd
-      - identifier:
           - PTYB22S2
         name: Sensee Moonlight
         features:
@@ -7558,34 +7565,9 @@ protocols:
                 - 100
               messages:
                 - ScalarCmd
-          - feature-type: Constrict
-            actuator:
-              step-range:
-                - 0
-                - 100
-              messages:
-                - ScalarCmd
-      - identifier:
-          - PTYB22S2
-        name: Sensee Dream Stick
-        features:
-          - feature-type: Vibrate
-            actuator:
-              step-range:
-                - 0
-                - 100
-              messages:
-                - ScalarCmd
-          - feature-type: Oscillate
-            actuator:
-              step-range:
-                - 0
-                - 100
-              messages:
-                - ScalarCmd
       - identifier:
           - CTY916S4
-        name: Sensee Rabbit
+        name: Sensee Dream Stick
         features:
           - feature-type: Oscillate
             actuator:
@@ -7610,7 +7592,6 @@ protocols:
             - CTY508S5
             - CTY916S4
             - PTYB22S2
-            - CTY222S4
           services:
             0000fff0-0000-1000-8000-00805f9b34fb:
               tx: 0000fff5-0000-1000-8000-00805f9b34fb
