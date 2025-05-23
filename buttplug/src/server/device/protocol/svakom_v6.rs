@@ -26,6 +26,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use std::sync::{Arc, RwLock};
+use crate::core::message::ActuatorType::Constrict;
 
 generic_protocol_initializer_setup!(SvakomV6, "svakom-v6");
 
@@ -149,6 +150,29 @@ impl ProtocolHandler for SvakomV6 {
           )
           .into(),
         );
+      }
+    }
+    
+    if vibes.len() == 0 && commands.len() > 0 {
+      if let Some(cmd) = commands[0] {
+        if cmd.0 == Constrict {
+          hcmds.push(
+            HardwareWriteCmd::new(
+              Endpoint::Tx,
+              [
+                0x55,
+                0x09,
+                0x00,
+                0x00,
+                if cmd.1 == 0 { 0x00 } else { 0x01 },
+                cmd.1 as u8,
+                0x00,
+              ]
+                  .to_vec(),
+              false,
+            )
+                .into());
+        }
       }
     }
 

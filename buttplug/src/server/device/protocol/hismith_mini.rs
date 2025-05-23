@@ -150,6 +150,26 @@ impl ProtocolHandler for HismithMini {
       vec![0xCC, idx, speed, speed + idx],
       false,
     )
-    .into()])
+        .into()])
+  }
+
+  fn handle_rotate_cmd(&self, commands: &[Option<(u32, bool)>]) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    let mut hcmds = vec![];
+    if let Some(cmd) = commands[0] {
+      hcmds.push( HardwareWriteCmd::new(
+        Endpoint::Tx,
+        vec![0xCC, 0x03, cmd.0 as u8, cmd.0 as u8 + 3],
+        false,
+      )
+          .into());
+      hcmds.push( HardwareWriteCmd::new(
+        Endpoint::Tx,
+        vec![0xCC, 0x01, if cmd.1 { 0xc0 } else {0xc1}, if cmd.1 { 0xc1 } else {0xc2}],
+        false,
+      )
+          .into());
+    }
+
+    Ok(hcmds)
   }
 }

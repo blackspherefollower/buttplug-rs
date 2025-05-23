@@ -1,6 +1,6 @@
 version:
   major: 3
-  minor: 15
+  minor: 16
 protocols:
   lovense:
     defaults:
@@ -3292,12 +3292,24 @@ protocols:
       - identifier:
           - Cici+ 2
         name: Svakom Cici+ 2
+      - identifier:
+          - VV468A
+        name: ToyCod Clara
+        features:
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 10
+              messages:
+                - ScalarCmd
     communication:
       - btle:
           names:
             - B2CM6
             - ERICA
             - Cici+ 2
+            - VV468A
           services:
             0000ffe0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffe1-0000-1000-8000-00805f9b34fb
@@ -3415,6 +3427,20 @@ protocols:
           - Echo 2
         name: Svakom Echo 2
       - identifier:
+          - VA617A-3
+        name: BeYourLover Naughty Clock Vibrator
+      - identifier:
+          - VA617A-4
+        name: BeYourLover Naughty Clock Sucker
+        features:
+          - feature-type: Constrict
+            actuator:
+              step-range:
+                - 0
+                - 10
+              messages:
+                - ScalarCmd
+      - identifier:
           - Vick Neo 2
         name: Svakom Vick Neo 2
         features:
@@ -3464,6 +3490,8 @@ protocols:
             - Echo 2
             - Vick Neo 2
             - Iker Neo
+            - VA617A-3
+            - VA617A-4
           services:
             0000ffe0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffe1-0000-1000-8000-00805f9b34fb
@@ -6140,6 +6168,14 @@ protocols:
       - identifier:
           - '2205'
         name: Sinloli Aston
+        features:
+          - feature-type: Rotate
+            actuator:
+              step-range:
+                - 0
+                - 100
+              messages:
+                - RotateCmd
     communication:
       - btle:
           names:
@@ -6617,13 +6653,38 @@ protocols:
               - 99
             messages:
               - ScalarCmd
+    configurations:
+      - identifier:
+          - HJ2024N01
+        name: VVD Vkini
     communication:
       - btle:
           names:
             - CFG1 vibrator
+            - HJ2024N01
           services:
             0000cfa2-0000-1000-8000-00805f9b34fb:
               tx: 0000cf21-0000-1000-8000-00805f9b34fb
+            0000dba2-0000-1000-8000-00805f9b34fb:
+              tx: 0000db21-0000-1000-8000-00805f9b34fb
+  metaxsire-v5:
+    defaults:
+      name: Sexverse Heart
+      features:
+        - feature-type: Vibrate
+          actuator:
+            step-range:
+              - 0
+              - 100
+            messages:
+              - ScalarCmd
+    communication:
+      - btle:
+          names:
+            - CBW02
+          services:
+            0000ffcb-0000-1000-8000-00805f9b34fb:
+              tx: 0000cb02-0000-1000-8000-00805f9b34fb
   sexverse-lg389:
     defaults:
       name: Sexverse LG389
@@ -6927,6 +6988,9 @@ protocols:
       - identifier:
           - MD19
         name: Secret Lover Kevin
+      - identifier:
+          - QD48
+        name: Adorime Wearable Egg Vibrator
       # Type 1
       - identifier:
           - G317
@@ -8070,6 +8134,7 @@ protocols:
             - CYX2 # Secret Lover Simon
             - RC31 # Secret Lover Betty
             - MD19 # Secret Lover Kevin
+            - QD48 # Adorime Wearable Egg Vibrator
             # Type 1
             - G317
             - G312
@@ -8863,6 +8928,18 @@ protocols:
           - J-Ryden
         name: JoyHub Ryden
       - identifier:
+          - J-Enam
+        name: JoyHub Enam
+      - identifier:
+          - J-Viv
+        name: JoyHub Viv
+      - identifier:
+          - J-Vivara
+        name: JoyHub Vivara
+      - identifier:
+          - J-Explorer2
+        name: JoyHub Explorer 2
+      - identifier:
           - J-Petalwish2
         name: JoyHub Petalwish 2
         features:
@@ -9170,6 +9247,10 @@ protocols:
             - J-Myrna
             - J-Vase2
             - J-Martino
+            - J-Enam
+            - J-Viv
+            - J-Vivara
+            - J-Explorer2
           services:
             0000ffa0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffa1-0000-1000-8000-00805f9b34fb
@@ -10368,6 +10449,31 @@ protocols:
                 - 255
               messages:
                 - ScalarCmd
+      - identifier:
+          - J-Vigo
+        name: JoyHub Vigo
+        features:
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+          - feature-type: Oscillate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
     communication:
       - btle:
           names:
@@ -10429,6 +10535,7 @@ protocols:
             - J-Vita
             - J-LACH
             - J-Markel
+            - J-Vigo
           services:
             0000ffa0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffa1-0000-1000-8000-00805f9b34fb
@@ -11058,6 +11165,53 @@ protocols:
               - 255
             messages:
               - ScalarCmd
+    configurations:
+      - identifier:
+          - TKLM-W001-BT
+        name: Luvmazer Finger Magic
+      - identifier:
+          - TKLM-W003-BT-RX
+        name: Luvmazer Cat Paw
+        features:
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+          - feature-type: Oscillate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+          - feature-type: Constrict
+            actuator:
+              step-range:
+                - 0
+                - 1
+              messages:
+                - ScalarCmd
+      - identifier:
+          - TKLM-C003-BT
+        name: Luvmazer Cock Ring
+        features:
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
     communication:
       - btle:
           names:

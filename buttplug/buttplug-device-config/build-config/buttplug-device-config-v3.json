@@ -1,7 +1,7 @@
 {
   "version": {
     "major": 3,
-    "minor": 15
+    "minor": 16
   },
   "protocols": {
     "lovense": {
@@ -5745,6 +5745,26 @@
             "Cici+ 2"
           ],
           "name": "Svakom Cici+ 2"
+        },
+        {
+          "identifier": [
+            "VV468A"
+          ],
+          "name": "ToyCod Clara",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  10
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            }
+          ]
         }
       ],
       "communication": [
@@ -5753,7 +5773,8 @@
             "names": [
               "B2CM6",
               "ERICA",
-              "Cici+ 2"
+              "Cici+ 2",
+              "VV468A"
             ],
             "services": {
               "0000ffe0-0000-1000-8000-00805f9b34fb": {
@@ -5963,6 +5984,32 @@
         },
         {
           "identifier": [
+            "VA617A-3"
+          ],
+          "name": "BeYourLover Naughty Clock Vibrator"
+        },
+        {
+          "identifier": [
+            "VA617A-4"
+          ],
+          "name": "BeYourLover Naughty Clock Sucker",
+          "features": [
+            {
+              "feature-type": "Constrict",
+              "actuator": {
+                "step-range": [
+                  0,
+                  10
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "identifier": [
             "Vick Neo 2"
           ],
           "name": "Svakom Vick Neo 2",
@@ -6045,7 +6092,9 @@
               "CocoPro",
               "Echo 2",
               "Vick Neo 2",
-              "Iker Neo"
+              "Iker Neo",
+              "VA617A-3",
+              "VA617A-4"
             ],
             "services": {
               "0000ffe0-0000-1000-8000-00805f9b34fb": {
@@ -10753,7 +10802,21 @@
           "identifier": [
             "2205"
           ],
-          "name": "Sinloli Aston"
+          "name": "Sinloli Aston",
+          "features": [
+            {
+              "feature-type": "Rotate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  100
+                ],
+                "messages": [
+                  "RotateCmd"
+                ]
+              }
+            }
+          ]
         }
       ],
       "communication": [
@@ -11600,15 +11663,60 @@
           }
         ]
       },
+      "configurations": [
+        {
+          "identifier": [
+            "HJ2024N01"
+          ],
+          "name": "VVD Vkini"
+        }
+      ],
       "communication": [
         {
           "btle": {
             "names": [
-              "CFG1 vibrator"
+              "CFG1 vibrator",
+              "HJ2024N01"
             ],
             "services": {
               "0000cfa2-0000-1000-8000-00805f9b34fb": {
                 "tx": "0000cf21-0000-1000-8000-00805f9b34fb"
+              },
+              "0000dba2-0000-1000-8000-00805f9b34fb": {
+                "tx": "0000db21-0000-1000-8000-00805f9b34fb"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "metaxsire-v5": {
+      "defaults": {
+        "name": "Sexverse Heart",
+        "features": [
+          {
+            "feature-type": "Vibrate",
+            "actuator": {
+              "step-range": [
+                0,
+                100
+              ],
+              "messages": [
+                "ScalarCmd"
+              ]
+            }
+          }
+        ]
+      },
+      "communication": [
+        {
+          "btle": {
+            "names": [
+              "CBW02"
+            ],
+            "services": {
+              "0000ffcb-0000-1000-8000-00805f9b34fb": {
+                "tx": "0000cb02-0000-1000-8000-00805f9b34fb"
               }
             }
           }
@@ -12191,6 +12299,12 @@
             "MD19"
           ],
           "name": "Secret Lover Kevin"
+        },
+        {
+          "identifier": [
+            "QD48"
+          ],
+          "name": "Adorime Wearable Egg Vibrator"
         },
         {
           "identifier": [
@@ -14148,6 +14262,7 @@
               "CYX2",
               "RC31",
               "MD19",
+              "QD48",
               "G317",
               "G312",
               "G302",
@@ -15494,6 +15609,30 @@
         },
         {
           "identifier": [
+            "J-Enam"
+          ],
+          "name": "JoyHub Enam"
+        },
+        {
+          "identifier": [
+            "J-Viv"
+          ],
+          "name": "JoyHub Viv"
+        },
+        {
+          "identifier": [
+            "J-Vivara"
+          ],
+          "name": "JoyHub Vivara"
+        },
+        {
+          "identifier": [
+            "J-Explorer2"
+          ],
+          "name": "JoyHub Explorer 2"
+        },
+        {
+          "identifier": [
             "J-Petalwish2"
           ],
           "name": "JoyHub Petalwish 2",
@@ -16001,7 +16140,11 @@
               "J-MarsLion2",
               "J-Myrna",
               "J-Vase2",
-              "J-Martino"
+              "J-Martino",
+              "J-Enam",
+              "J-Viv",
+              "J-Vivara",
+              "J-Explorer2"
             ],
             "services": {
               "0000ffa0-0000-1000-8000-00805f9b34fb": {
@@ -18109,6 +18252,50 @@
               }
             }
           ]
+        },
+        {
+          "identifier": [
+            "J-Vigo"
+          ],
+          "name": "JoyHub Vigo",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Oscillate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            }
+          ]
         }
       ],
       "communication": [
@@ -18172,7 +18359,8 @@
               "J-Marcela",
               "J-Vita",
               "J-LACH",
-              "J-Markel"
+              "J-Markel",
+              "J-Vigo"
             ],
             "services": {
               "0000ffa0-0000-1000-8000-00805f9b34fb": {
@@ -19283,6 +19471,90 @@
           }
         ]
       },
+      "configurations": [
+        {
+          "identifier": [
+            "TKLM-W001-BT"
+          ],
+          "name": "Luvmazer Finger Magic"
+        },
+        {
+          "identifier": [
+            "TKLM-W003-BT-RX"
+          ],
+          "name": "Luvmazer Cat Paw",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Oscillate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Constrict",
+              "actuator": {
+                "step-range": [
+                  0,
+                  1
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "identifier": [
+            "TKLM-C003-BT"
+          ],
+          "name": "Luvmazer Cock Ring",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  255
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            }
+          ]
+        }
+      ],
       "communication": [
         {
           "btle": {

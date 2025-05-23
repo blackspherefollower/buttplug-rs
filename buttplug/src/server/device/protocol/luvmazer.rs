@@ -72,32 +72,6 @@ impl ProtocolHandler for Luvmazer {
     super::ProtocolKeepaliveStrategy::RepeatLastPacketStrategy
   }
 
-  fn handle_scalar_vibrate_cmd(
-    &self,
-    _index: u32,
-    scalar: u32,
-  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-    Ok(vec![HardwareWriteCmd::new(
-      Endpoint::Tx,
-      vec![0xa0, 0x01, 0x00, 0x00, 0x64, scalar as u8],
-      false,
-    )
-    .into()])
-  }
-
-  fn handle_scalar_rotate_cmd(
-    &self,
-    _index: u32,
-    scalar: u32,
-  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
-    Ok(vec![HardwareWriteCmd::new(
-      Endpoint::Tx,
-      vec![0xa0, 0x0f, 0x00, 0x00, 0x64, scalar as u8],
-      false,
-    )
-    .into()])
-  }
-
   fn handle_scalar_cmd(
     &self,
     commands: &[Option<(ActuatorType, u32)>],
@@ -125,10 +99,31 @@ impl ProtocolHandler for Luvmazer {
       }
     }
 
+    if let Some(cmd) = cmd2 {
+      if cmd.0 == ActuatorType::Oscillate {
+        if cmd1.is_some() {
+          let dev = self.device.clone();
+          async_manager::spawn(async move { delayed_rotate_handler(dev, cmd.1 as u8).await });
+        } else {
+          return Ok(vec![HardwareWriteCmd::new(
+            Endpoint::Tx,
+            vec![0xa0, 0x06, 0x01, 0x00, 0x64, cmd.1 as u8],
+            false,
+          )
+              .into()]);
+        }
+      }
+    }
+    /*
+    vec![0xa0, 0x0d, 0x00, 0x00, 0x64, 0x00], # inflate
+    vec![0xa0, 0x0d, 0x00, 0x00, 0x00, 0x00], # deflate
+     */
+
+    let idx = 0;
     if let Some(cmd) = cmd1 {
       return Ok(vec![HardwareWriteCmd::new(
         Endpoint::Tx,
-        vec![0xa0, 0x01, 0x00, 0x00, 0x64, cmd.1 as u8],
+        vec![0xa0, 0x01, 0x00, idx, 0x64, cmd.1 as u8],
         false,
       )
       .into()]);
