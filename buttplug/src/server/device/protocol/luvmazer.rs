@@ -110,7 +110,7 @@ impl ProtocolHandler for Luvmazer {
             vec![0xa0, 0x06, 0x01, 0x00, 0x64, cmd.1 as u8],
             false,
           )
-              .into()]);
+          .into()]);
         }
       }
     }

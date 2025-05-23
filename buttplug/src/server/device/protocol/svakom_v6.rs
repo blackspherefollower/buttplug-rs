@@ -5,6 +5,7 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
+use crate::core::message::ActuatorType::Constrict;
 use crate::{
   core::{
     errors::ButtplugDeviceError,
@@ -26,7 +27,6 @@ use crate::{
 };
 use async_trait::async_trait;
 use std::sync::{Arc, RwLock};
-use crate::core::message::ActuatorType::Constrict;
 
 generic_protocol_initializer_setup!(SvakomV6, "svakom-v6");
 
@@ -152,7 +152,7 @@ impl ProtocolHandler for SvakomV6 {
         );
       }
     }
-    
+
     if vibes.len() == 0 && commands.len() > 0 {
       if let Some(cmd) = commands[0] {
         if cmd.0 == Constrict {
@@ -168,10 +168,11 @@ impl ProtocolHandler for SvakomV6 {
                 cmd.1 as u8,
                 0x00,
               ]
-                  .to_vec(),
+              .to_vec(),
               false,
             )
-                .into());
+            .into(),
+          );
         }
       }
     }
