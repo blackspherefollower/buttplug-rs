@@ -15635,6 +15635,12 @@
         },
         {
           "identifier": [
+            "J-Peachy"
+          ],
+          "name": "JoyHub Peachy"
+        },
+        {
+          "identifier": [
             "J-Petalwish2"
           ],
           "name": "JoyHub Petalwish 2",
@@ -16146,7 +16152,8 @@
               "J-Enam",
               "J-Viv",
               "J-Vivara",
-              "J-Explorer2"
+              "J-Explorer2",
+              "J-Peachy"
             ],
             "services": {
               "0000ffa0-0000-1000-8000-00805f9b34fb": {

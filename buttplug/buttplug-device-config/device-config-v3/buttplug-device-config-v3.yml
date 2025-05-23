@@ -8942,6 +8942,9 @@ protocols:
           - J-Explorer2
         name: JoyHub Explorer 2
       - identifier:
+          - J-Peachy
+        name: JoyHub Peachy
+      - identifier:
           - J-Petalwish2
         name: JoyHub Petalwish 2
         features:
@@ -9253,6 +9256,7 @@ protocols:
             - J-Viv
             - J-Vivara
             - J-Explorer2
+            - J-Peachy
           services:
             0000ffa0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffa1-0000-1000-8000-00805f9b34fb
