@@ -7975,6 +7975,7 @@ protocols:
                 - SensorReadCmd
       - identifier:
           - GK27
+          - GX27
         name: Galaku Cannon-GT
         features:
           - feature-type: Vibrate
@@ -8173,6 +8174,7 @@ protocols:
             # Type 2
             - TFG1
             - GK27
+            - GX27 # https://discord.com/channels/353303527587708932/1370367465573580881
             - GK25
             - AC695X_1(BLE)
             - GX33

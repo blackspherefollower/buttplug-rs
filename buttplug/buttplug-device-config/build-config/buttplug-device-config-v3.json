@@ -14023,7 +14023,8 @@
         },
         {
           "identifier": [
-            "GK27"
+            "GK27",
+            "GX27"
           ],
           "name": "Galaku Cannon-GT",
           "features": [
@@ -14299,6 +14300,7 @@
               "QCPW",
               "TFG1",
               "GK27",
+              "GX27",
               "GK25",
               "AC695X_1(BLE)",
               "GX33",
