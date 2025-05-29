@@ -10595,10 +10595,45 @@ protocols:
               - 3
             messages:
               - ScalarCmd
+    configurations:
+      - identifier:
+          - 26-021-B
+        name: iToys Seagull
+      - identifier:
+          - SML-2310-SZ-B
+        name: iToys Twinkling Stars
+        features:
+          - feature-type: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 3
+              messages:
+                - ScalarCmd
+          - feature-type: Oscillate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
+      - identifier:
+          - ASF-001-BT-R
+        name: Defyeah Horizontal Sex Machine ASFO16
+        features:
+          - feature-type: Oscillate
+            actuator:
+              step-range:
+                - 0
+                - 255
+              messages:
+                - ScalarCmd
     communication:
       - btle:
           names:
             - 26-021-B
+            - SML-2310-SZ-B
+            - ASF-001-BT-R
           services:
             0000ffa0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffa1-0000-1000-8000-00805f9b34fb
