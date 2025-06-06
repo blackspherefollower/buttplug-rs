@@ -11235,6 +11235,8 @@ protocols:
       - btle:
           names:
             - TKLM-W001-BT
+            - TKLM-W003-BT-RX
+            - TKLM-C003-BT
           services:
             0000ffa0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffa1-0000-1000-8000-00805f9b34fb
