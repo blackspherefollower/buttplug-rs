@@ -2848,10 +2848,15 @@ protocols:
                 - 100
             messages:
               - SensorReadCmd
+    configurations:
+      - identifier:
+          - Luxus
+        name: Luxus
     communication:
       - btle:
           names:
             - ProWand
+            - Luxus
           services:
             00001400-0000-1000-8000-00805f9b34fb:
               tx: 00001401-0000-1000-8000-00805f9b34fb
