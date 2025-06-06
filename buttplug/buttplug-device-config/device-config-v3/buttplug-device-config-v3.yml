@@ -6996,6 +6996,12 @@ protocols:
       - identifier:
           - QD48
         name: Adorime Wearable Egg Vibrator
+      - identifier:
+          - BGSF
+        name: Adorime Male Masturbator
+      - identifier:
+          - BGQS
+        name: Adorime Penis Vibrator
       # Type 1
       - identifier:
           - G317
@@ -8141,6 +8147,8 @@ protocols:
             - RC31 # Secret Lover Betty
             - MD19 # Secret Lover Kevin
             - QD48 # Adorime Wearable Egg Vibrator
+            - BGSF # Adorime Male Masturbator
+            - BGQS # Adorime Penis Vibrator
             # Type 1
             - G317
             - G312
