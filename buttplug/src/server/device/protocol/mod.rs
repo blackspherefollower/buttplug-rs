@@ -129,6 +129,7 @@ pub mod svakom_v6;
 pub mod synchro;
 pub mod tcode_v03;
 pub mod thehandy;
+pub mod thehandy_v4;
 pub mod tryfun;
 pub mod tryfun_blackhole;
 pub mod tryfun_meta2;
@@ -281,6 +282,10 @@ pub fn get_default_protocol_map() -> HashMap<String, Arc<dyn ProtocolIdentifierF
   add_to_protocol_map(
     &mut map,
     thehandy::setup::TheHandyIdentifierFactory::default(),
+  );
+  add_to_protocol_map(
+    &mut map,
+    thehandy_v4::setup::TheHandyV4IdentifierFactory::default(),
   );
 
   add_to_protocol_map(&mut map, ankni::setup::AnkniIdentifierFactory::default());

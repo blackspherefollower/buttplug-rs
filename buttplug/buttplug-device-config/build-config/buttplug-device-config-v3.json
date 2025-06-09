@@ -7641,6 +7641,40 @@
         }
       ]
     },
+    "thehandy-v4": {
+      "defaults": {
+        "name": "The Oh!",
+        "features": [
+          {
+            "feature-type": "Vibrate",
+            "actuator": {
+              "step-range": [
+                0,
+                100
+              ],
+              "messages": [
+                "ScalarCmd"
+              ]
+            }
+          }
+        ]
+      },
+      "communication": [
+        {
+          "btle": {
+            "names": [
+              "OHD_hw1_*"
+            ],
+            "services": {
+              "77834d26-40f7-11ee-be56-0242ac120002": {
+                "rx": "77835410-40f7-11ee-be56-0242ac120002",
+                "tx": "77835032-40f7-11ee-be56-0242ac120002"
+              }
+            }
+          }
+        }
+      ]
+    },
     "cachito": {
       "defaults": {
         "name": "Cachito Device",
