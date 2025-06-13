@@ -12329,6 +12329,12 @@
         },
         {
           "identifier": [
+            "AX05"
+          ],
+          "name": "Adorime Anal Vibrator"
+        },
+        {
+          "identifier": [
             "G317"
           ],
           "name": "Galaku Zaku Aircraft Cup",
@@ -13995,6 +14001,55 @@
         },
         {
           "identifier": [
+            "SN80"
+          ],
+          "name": "Adorime G-spot Rabbit Dildo Vibrator",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "description": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  100
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Vibrate",
+              "description": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  100
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Battery",
+              "description": "Battery Level",
+              "sensor": {
+                "value-range": [
+                  [
+                    0,
+                    100
+                  ]
+                ],
+                "messages": [
+                  "SensorReadCmd"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "identifier": [
             "TFG1"
           ],
           "name": "Galaku Aurora Aircraft Cup",
@@ -14287,6 +14342,7 @@
               "QD48",
               "BGSF",
               "BGQS",
+              "AX05",
               "G317",
               "G312",
               "G302",
@@ -14321,6 +14377,7 @@
               "QCVW",
               "QCSW",
               "QCPW",
+              "SN80",
               "TFG1",
               "GK27",
               "GX27",

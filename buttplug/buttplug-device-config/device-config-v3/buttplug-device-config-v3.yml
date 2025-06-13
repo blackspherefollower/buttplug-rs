@@ -7002,6 +7002,9 @@ protocols:
       - identifier:
           - BGQS
         name: Adorime Penis Vibrator
+      - identifier:
+          - AX05
+        name: Adorime Anal Vibrator
       # Type 1
       - identifier:
           - G317
@@ -7955,6 +7958,34 @@ protocols:
                   - 100
               messages:
                 - SensorReadCmd
+      - identifier:
+          - SN80
+        name: Adorime G-spot Rabbit Dildo Vibrator
+        features:
+          - feature-type: Vibrate
+            description: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 100
+              messages:
+                - ScalarCmd
+          - feature-type: Vibrate
+            description: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 100
+              messages:
+                - ScalarCmd
+          - feature-type: Battery
+            description: Battery Level
+            sensor:
+              value-range:
+                - - 0
+                  - 100
+              messages:
+                - SensorReadCmd
       # Type 2
       - identifier:
           - TFG1
@@ -8149,6 +8180,7 @@ protocols:
             - QD48 # Adorime Wearable Egg Vibrator
             - BGSF # Adorime Male Masturbator
             - BGQS # Adorime Penis Vibrator
+            - AX05 # Adorime Anal Vibrator
             # Type 1
             - G317
             - G312
@@ -8184,6 +8216,7 @@ protocols:
             - QCVW
             - QCSW
             - QCPW
+            - SN80 # Adorime G-spot Rabbit Dildo Vibrator
             # Type 2
             - TFG1
             - GK27
