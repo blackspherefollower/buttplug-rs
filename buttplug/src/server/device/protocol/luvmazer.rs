@@ -49,7 +49,7 @@ async fn delayed_handler_long(device: Arc<Hardware>, cmd: u8, mode: u8, idx:u8, 
   let res = device
       .write_value(&HardwareWriteCmd::new(
         Endpoint::Tx,
-        vec![0xa0, cmd, mode, idx, 0x64, scalar as u8],
+        vec![0xa0, cmd, mode, idx, bits, scalar as u8],
         false,
       ))
       .await;
