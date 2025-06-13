@@ -11341,3 +11341,21 @@ protocols:
           services:
             0000ffb0-0000-1000-8000-00805f9b34fb:
               tx: 0000ffb2-0000-1000-8000-00805f9b34fb
+  sagan:
+    defaults:
+      name: Sagan Huanran Wireless Vibrator
+      features:
+        - feature-type: Vibrate
+          actuator:
+            step-range:
+              - 0
+              - 100
+            messages:
+              - ScalarCmd
+    communication:
+      - btle:
+          names:
+            - FXHRBQ
+          services:
+            0000fffe-0000-1000-8000-00805f9b34fb:
+              tx: 0000fe02-0000-1000-8000-00805f9b34fb
