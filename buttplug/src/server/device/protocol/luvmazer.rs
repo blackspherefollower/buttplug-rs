@@ -30,7 +30,7 @@ use tokio::time::sleep;
 
 generic_protocol_initializer_setup!(Luvmazer, "luvmazer");
 
-async fn delayed_handler(device: Arc<Hardware>, cmd: u8, mode: u8, idx:u8, scalar: u8) {
+async fn delayed_handler(device: Arc<Hardware>, cmd: u8, mode: u8, idx: u8, scalar: u8) {
   sleep(Duration::from_millis(50)).await;
   let res = device
     .write_value(&HardwareWriteCmd::new(
@@ -44,15 +44,22 @@ async fn delayed_handler(device: Arc<Hardware>, cmd: u8, mode: u8, idx:u8, scala
   }
 }
 
-async fn delayed_handler_long(device: Arc<Hardware>, cmd: u8, mode: u8, idx:u8, bits:u8, scalar: u8) {
+async fn delayed_handler_long(
+  device: Arc<Hardware>,
+  cmd: u8,
+  mode: u8,
+  idx: u8,
+  bits: u8,
+  scalar: u8,
+) {
   sleep(Duration::from_millis(100)).await;
   let res = device
-      .write_value(&HardwareWriteCmd::new(
-        Endpoint::Tx,
-        vec![0xa0, cmd, mode, idx, bits, scalar as u8],
-        false,
-      ))
-      .await;
+    .write_value(&HardwareWriteCmd::new(
+      Endpoint::Tx,
+      vec![0xa0, cmd, mode, idx, bits, scalar as u8],
+      false,
+    ))
+    .await;
   if res.is_err() {
     error!("Delayed Luvmazer command error: {:?}", res.err());
   }
@@ -102,12 +109,14 @@ impl ProtocolHandler for Luvmazer {
     } else {
       None
     };
-    
+
     if let Some(cmd) = cmd2 {
       if cmd.0 == ActuatorType::Rotate {
         if cmd1.is_some() {
           let dev = self.device.clone();
-          async_manager::spawn(async move { delayed_handler(dev, 0x0f,0x00, 0x00, cmd.1 as u8).await });
+          async_manager::spawn(
+            async move { delayed_handler(dev, 0x0f, 0x00, 0x00, cmd.1 as u8).await },
+          );
         } else {
           return Ok(vec![HardwareWriteCmd::new(
             Endpoint::Tx,
@@ -119,47 +128,67 @@ impl ProtocolHandler for Luvmazer {
       } else if cmd.0 == ActuatorType::Oscillate {
         if cmd1.is_some() {
           let dev = self.device.clone();
-          async_manager::spawn(async move { delayed_handler(dev, 0x06, 0x01, 0x00, cmd.1 as u8).await });
+          async_manager::spawn(
+            async move { delayed_handler(dev, 0x06, 0x01, 0x00, cmd.1 as u8).await },
+          );
         } else {
           return Ok(vec![HardwareWriteCmd::new(
             Endpoint::Tx,
             vec![0xa0, 0x06, 0x01, 0x00, 0x64, cmd.1 as u8],
             false,
           )
-              .into()]);
+          .into()]);
         }
       } else if cmd.0 == ActuatorType::Vibrate {
         if cmd1.is_some() {
           let dev = self.device.clone();
-          async_manager::spawn(async move { delayed_handler(dev, 0x01, 0x00, 0x01, cmd.1 as u8).await });
+          async_manager::spawn(
+            async move { delayed_handler(dev, 0x01, 0x00, 0x01, cmd.1 as u8).await },
+          );
         } else {
           return Ok(vec![HardwareWriteCmd::new(
             Endpoint::Tx,
             vec![0xa0, 0x01, 0x00, 0x01, 0x64, cmd.1 as u8],
             false,
           )
-              .into()]);
+          .into()]);
         }
       }
     }
 
-
     if let Some(cmd) = cmd3 {
       if cmd.0 == ActuatorType::Constrict {
-          if cmd1.is_some() {
-            let dev = self.device.clone();
-            async_manager::spawn(async move { delayed_handler_long(dev, 0x01, 0x00, 0x01, if cmd.1 == 0 {0x00} else {0x64}, cmd.1 as u8).await });
-          } else {
-            return Ok(vec![HardwareWriteCmd::new(
-              Endpoint::Tx,
-              vec![0xa0, 0x0d, 0x00, 0x00, if cmd.1 == 0 {0x00} else {0x64}, cmd.1 as u8],
-              false,
+        if cmd1.is_some() {
+          let dev = self.device.clone();
+          async_manager::spawn(async move {
+            delayed_handler_long(
+              dev,
+              0x01,
+              0x00,
+              0x01,
+              if cmd.1 == 0 { 0x00 } else { 0x64 },
+              cmd.1 as u8,
             )
-                .into()]);
-          }
+            .await
+          });
+        } else {
+          return Ok(vec![HardwareWriteCmd::new(
+            Endpoint::Tx,
+            vec![
+              0xa0,
+              0x0d,
+              0x00,
+              0x00,
+              if cmd.1 == 0 { 0x00 } else { 0x64 },
+              cmd.1 as u8,
+            ],
+            false,
+          )
+          .into()]);
+        }
       }
     }
-      
+
     /*
     vec![0xa0, 0x0d, 0x00, 0x00, 0x64, 0xff], # inflate
     vec![0xa0, 0x0d, 0x00, 0x00, 0x00, 0x00], # deflate

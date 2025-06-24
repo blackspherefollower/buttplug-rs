@@ -525,10 +525,7 @@ pub fn get_default_protocol_map() -> HashMap<String, Arc<dyn ProtocolIdentifierF
     raw_protocol::setup::RawProtocolIdentifierFactory::default(),
   );
   add_to_protocol_map(&mut map, realov::setup::RealovIdentifierFactory::default());
-  add_to_protocol_map(
-    &mut map,
-    sagan::setup::SaganIdentifierFactory::default(),
-  );
+  add_to_protocol_map(&mut map, sagan::setup::SaganIdentifierFactory::default());
   add_to_protocol_map(
     &mut map,
     sakuraneko::setup::SakuranekoIdentifierFactory::default(),

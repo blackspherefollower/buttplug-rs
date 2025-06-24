@@ -41,12 +41,12 @@ impl ProtocolInitializer for SenseeV2Initializer {
       .await?;
     info!("Sensee model data: {:X?}", res.data());
     let mut protocol = SenseeV2::default();
-    protocol.device_type = if res.data().len() >= 6 {
+    protocol.device_type = if res.data().len() >= 6 && res.data()[6] != 0 {
       res.data()[6]
     } else {
-      0x66
+      0x65
     };
-
+    
     protocol.vibe_count = device_definition
       .features()
       .iter()
@@ -78,7 +78,7 @@ pub struct SenseeV2 {
 fn make_cmd(dtype: u8, func: u8, cmd: Vec<u8>) -> Vec<u8> {
   let mut out = vec![0x55, 0xAA, 0xF0]; // fixed start code
   out.push(0x02); // version
-  out.push(0x00); // package numer?
+  out.push(0x01); // package numer?
   out.push(0x04 + cmd.len() as u8); // Data length
   out.push(dtype); // Device type - always 0x66?
   out.push(func); // Function code
