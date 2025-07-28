@@ -14050,6 +14050,55 @@
         },
         {
           "identifier": [
+            "BGCD"
+          ],
+          "name": "Adorime Backy",
+          "features": [
+            {
+              "feature-type": "Vibrate",
+              "description": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  100
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Vibrate",
+              "description": "Vibrate",
+              "actuator": {
+                "step-range": [
+                  0,
+                  100
+                ],
+                "messages": [
+                  "ScalarCmd"
+                ]
+              }
+            },
+            {
+              "feature-type": "Battery",
+              "description": "Battery Level",
+              "sensor": {
+                "value-range": [
+                  [
+                    0,
+                    100
+                  ]
+                ],
+                "messages": [
+                  "SensorReadCmd"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "identifier": [
             "TFG1"
           ],
           "name": "Galaku Aurora Aircraft Cup",
@@ -14378,6 +14427,7 @@
               "QCSW",
               "QCPW",
               "SN80",
+              "BGCD",
               "TFG1",
               "GK27",
               "GX27",

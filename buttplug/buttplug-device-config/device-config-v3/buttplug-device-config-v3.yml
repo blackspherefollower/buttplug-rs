@@ -7986,6 +7986,34 @@ protocols:
                   - 100
               messages:
                 - SensorReadCmd
+      - identifier:
+          - BGCD
+        name: Adorime Backy
+        features:
+          - feature-type: Vibrate
+            description: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 100
+              messages:
+                - ScalarCmd
+          - feature-type: Vibrate
+            description: Vibrate
+            actuator:
+              step-range:
+                - 0
+                - 100
+              messages:
+                - ScalarCmd
+          - feature-type: Battery
+            description: Battery Level
+            sensor:
+              value-range:
+                - - 0
+                  - 100
+              messages:
+                - SensorReadCmd
       # Type 2
       - identifier:
           - TFG1
@@ -8217,6 +8245,7 @@ protocols:
             - QCSW
             - QCPW
             - SN80 # Adorime G-spot Rabbit Dildo Vibrator
+            - BGCD # Adorime Backy
             # Type 2
             - TFG1
             - GK27
