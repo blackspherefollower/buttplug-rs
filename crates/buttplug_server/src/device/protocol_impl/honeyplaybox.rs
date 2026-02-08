@@ -232,14 +232,10 @@ impl HoneyPlayBox {
       last_send,
     }
   }
-}
 
-#[async_trait]
-impl ProtocolHandler for HoneyPlayBox {
-  fn handle_output_vibrate_cmd(
+  fn send_command(
     &self,
     feature_index: u32,
-    _feature_id: Uuid,
     speed: u32,
   ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
     // Best effort last command time update
@@ -263,17 +259,47 @@ impl ProtocolHandler for HoneyPlayBox {
     }
 
     let payload = build_vibrate_data(&self.random_key, &groups)
-      .map_err(|e| ButtplugDeviceError::ProtocolSpecificError("HoneyPlayBox".into(), e))?;
+        .map_err(|e| ButtplugDeviceError::ProtocolSpecificError("HoneyPlayBox".into(), e))?;
     self.packet_id.store(
       self.packet_id.load(Ordering::Relaxed).wrapping_add(1),
       Ordering::Relaxed,
     );
     let data =
-      FrameCodec::build_frame(0xB1, 0x03, &payload, self.packet_id.load(Ordering::Relaxed));
+        FrameCodec::build_frame(0xB1, 0x03, &payload, self.packet_id.load(Ordering::Relaxed));
 
     Ok(vec![
       HardwareWriteCmd::new(&[HONEY_PLAYBOX_PROTOCOL_UUID], Endpoint::Tx, data, true).into(),
     ])
+  }
+}
+
+#[async_trait]
+impl ProtocolHandler for HoneyPlayBox {
+  fn handle_output_vibrate_cmd(
+    &self,
+    feature_index: u32,
+    _feature_id: Uuid,
+    speed: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    self.send_command(feature_index, speed)
+  }
+
+  fn handle_output_oscillate_cmd(
+    &self,
+    feature_index: u32,
+    _feature_id: Uuid,
+    speed: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    self.send_command(feature_index, speed)
+  }
+
+  fn handle_output_rotate_cmd(
+    &self,
+    feature_index: u32,
+    _feature_id: Uuid,
+    speed: i32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    self.send_command(feature_index, speed.abs() as u32)
   }
 
   fn handle_battery_level_cmd(
