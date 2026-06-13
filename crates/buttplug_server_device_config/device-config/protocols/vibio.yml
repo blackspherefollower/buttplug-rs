@@ -1,0 +1,68 @@
+---
+defaults:
+  name: Vibio Device
+  features:
+  - id: 07fc251a-201b-4f93-b5b0-c2bf1d47b891
+    output:
+      vibrate:
+        value:
+        - 0
+        - 99
+    index: 0
+  - id: 95270dd0-03b0-46ba-8f63-d3e8991d1c24
+    output:
+      vibrate:
+        value:
+        - 0
+        - 99
+    index: 1
+  id: 9574d774-db15-41fe-baee-0ee2739f4117
+configurations:
+- identifier:
+  - Clara_Vibio
+  name: Vibio Clara
+  features:
+  - id: 02848ff6-2816-4325-842f-b069ab6fc516
+    output:
+      vibrate:
+        value:
+        - 0
+        - 99
+    index: 0
+  id: 89ddbfe5-62b1-456e-906d-2366aa6a1efa
+- identifier:
+  - Dodson_Vibio
+  name: Vibio Dodson
+  features:
+  - id: df16cbc2-a026-4687-8533-0867301933d5
+    output:
+      vibrate:
+        value:
+        - 0
+        - 99
+    index: 0
+  id: e8187ce2-c3c8-42a6-8a8a-0c833d2ea245
+- identifier:
+  - Rivera_Vibio
+  name: Vibio Rivera
+  id: d273c4b2-6eb9-4a94-add4-828fd664edf1
+- identifier:
+  - Elle_Vibio
+  name: Vibio Elle
+  id: a9734a3d-a123-4d78-8335-f2fc0ca0108c
+- identifier:
+  - Frida_Vibio
+  name: Vibio Frida
+  id: 5a71ddac-b6ed-4601-a62b-bbca1e6248c4
+communication:
+- btle:
+    names:
+    - Clara_Vibio
+    - Dodson_Vibio
+    - Elle_Vibio
+    - Frida_Vibio
+    - Rivera_Vibio
+    services:
+      53300021-0050-4bd4-bbe5-a6920e4c5663:
+        tx: 53300022-0050-4bd4-bbe5-a6920e4c5663
+        rx: 53300023-0050-4bd4-bbe5-a6920e4c5663
