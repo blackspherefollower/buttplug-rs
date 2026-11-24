@@ -116,8 +116,7 @@ impl ProtocolHandler for Kaotik {
         ],
         false,
       )
-          .into(),
+      .into(),
     ])
   }
-
 }
