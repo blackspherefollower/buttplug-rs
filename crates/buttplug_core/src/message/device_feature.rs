@@ -227,6 +227,8 @@ pub enum DeviceFeatureInput {
   Pressure(DeviceFeatureInputProperties),
   Depth(DeviceFeatureInputProperties),
   Position(DeviceFeatureInputProperties),
+  Accelerometer(DeviceFeatureInputProperties),
+  Counter(DeviceFeatureInputProperties),
 }
 
 impl DeviceFeatureInput {
@@ -242,6 +244,8 @@ impl DeviceFeatureInput {
       DeviceFeatureInput::Pressure(p) => p.command(),
       DeviceFeatureInput::Depth(p) => p.command(),
       DeviceFeatureInput::Position(p) => p.command(),
+      DeviceFeatureInput::Accelerometer(p) => p.command(),
+      DeviceFeatureInput::Counter(p) => p.command(),
     }
   }
 }

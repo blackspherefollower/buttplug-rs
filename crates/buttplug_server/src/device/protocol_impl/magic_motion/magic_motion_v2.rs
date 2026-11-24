@@ -6,7 +6,10 @@
 // for full license information.
 
 use async_trait::async_trait;
-use futures::future::BoxFuture;
+use futures::{
+  FutureExt,
+  future::{self, BoxFuture},
+};
 use std::sync::{
   Arc,
   atomic::{AtomicU8, Ordering},
@@ -30,10 +33,11 @@ use buttplug_server_device_config::{
   UserDeviceIdentifier,
 };
 
-use super::magic_motion_pressure::{
-  MagicMotionPressureEventStream,
+use super::magic_motion_input::{
+  MagicMotionInputEventStream,
+  MagicMotionInputSubscriptions,
   MagicMotionPressureFormat,
-  MagicMotionPressureSubscriptions,
+  pressure_subscriptions,
 };
 
 const MAGIC_MOTION_2_PROTOCOL_UUID: Uuid = uuid!("4d6e9297-c57e-4ce7-a63c-24cc7d117a47");
@@ -58,14 +62,14 @@ impl ProtocolInitializer for MagicMotionV2Initializer {
 
 pub struct MagicMotionV2 {
   speeds: [AtomicU8; 2],
-  pressure: MagicMotionPressureSubscriptions,
+  pressure: MagicMotionInputSubscriptions<2>,
 }
 
 impl MagicMotionV2 {
   fn new(format: MagicMotionPressureFormat) -> Self {
     Self {
       speeds: [AtomicU8::new(0), AtomicU8::new(0)],
-      pressure: MagicMotionPressureSubscriptions::new(format),
+      pressure: pressure_subscriptions(format),
     }
   }
 }
@@ -110,9 +114,17 @@ impl ProtocolHandler for MagicMotionV2 {
     feature_id: Uuid,
     sensor_type: InputType,
   ) -> BoxFuture<'_, Result<(), ButtplugDeviceError>> {
-    self
-      .pressure
-      .subscribe(device_index, device, feature_index, feature_id, sensor_type)
+    match sensor_type {
+      InputType::Pressure => {
+        self
+          .pressure
+          .subscribe(device_index, device, feature_index, feature_id)
+      }
+      _ => future::ready(Err(ButtplugDeviceError::UnhandledCommand(format!(
+        "Magic Motion V2 input subscribe not implemented for {sensor_type}"
+      ))))
+      .boxed(),
+    }
   }
 
   fn handle_input_unsubscribe_cmd(
@@ -122,12 +134,16 @@ impl ProtocolHandler for MagicMotionV2 {
     feature_id: Uuid,
     sensor_type: InputType,
   ) -> BoxFuture<'_, Result<(), ButtplugDeviceError>> {
-    self
-      .pressure
-      .unsubscribe(device, feature_index, feature_id, sensor_type)
+    match sensor_type {
+      InputType::Pressure => self.pressure.unsubscribe(device, feature_index, feature_id),
+      _ => future::ready(Err(ButtplugDeviceError::UnhandledCommand(format!(
+        "Magic Motion V2 input unsubscribe not implemented for {sensor_type}"
+      ))))
+      .boxed(),
+    }
   }
 
-  fn event_stream(&self) -> MagicMotionPressureEventStream {
+  fn event_stream(&self) -> MagicMotionInputEventStream {
     self.pressure.event_stream()
   }
 }

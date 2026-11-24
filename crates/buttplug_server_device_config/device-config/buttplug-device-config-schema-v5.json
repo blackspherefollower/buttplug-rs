@@ -237,7 +237,7 @@
           "input": {
             "type": "object",
             "patternProperties": {
-              "^(battery|rssi|pressure)$": {
+              "^(accelerometer|battery|rssi|pressure|counter)$": {
                 "type": "object",
                 "properties": {
                   "value": {

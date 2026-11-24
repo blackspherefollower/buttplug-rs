@@ -1,7 +1,7 @@
 {
   "version": {
     "major": 5,
-    "minor": 102
+    "minor": 107
   },
   "protocols": {
     "activejoy": {
@@ -16562,6 +16562,9 @@
                 "rxblebattery": "00002a19-0000-1000-8000-00805f9b34fb"
               },
               "6f468792-f91f-11e3-a847-b2227cce2b54": {
+                "generic0": "6f468dfc-f91f-11e3-a847-b2227cce2b54",
+                "generic1": "6f468efc-f91f-11e3-a847-b2227cce2b54",
+                "rxaccel": "6f468cfc-f91f-11e3-a847-b2227cce2b54",
                 "rxpressure": "6f468bfc-f91f-11e3-a847-b2227cce2b54"
               },
               "78667579-7b48-43db-b8c5-7928a6b0a335": {
@@ -16805,6 +16808,110 @@
           "name": "MagicMotion Kegel"
         },
         {
+          "features": [
+            {
+              "id": "d3c3c9f1-cada-4367-8c65-3cc4b2570427",
+              "index": 0,
+              "output": {
+                "vibrate": {
+                  "value": [
+                    0,
+                    100
+                  ]
+                }
+              }
+            },
+            {
+              "description": "battery Level",
+              "id": "a7254fc3-45b0-444c-9106-78105ea27c99",
+              "index": 1,
+              "input": {
+                "battery": {
+                  "command": [
+                    "Read"
+                  ],
+                  "value": [
+                    [
+                      0,
+                      100
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Cumulative step count (raw)",
+              "id": "5637217a-bcb2-44c4-8cf5-d19bc6e0681c",
+              "index": 2,
+              "input": {
+                "counter": {
+                  "command": [
+                    "Read"
+                  ],
+                  "value": [
+                    [
+                      0,
+                      2147483647
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer X (raw)",
+              "id": "1d6ca61b-e95d-4225-9e03-ee2953b43769",
+              "index": 3,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer Y (raw)",
+              "id": "b35a11a0-0a0b-404a-8463-b5005d7e2c83",
+              "index": 4,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer Z (raw)",
+              "id": "8303a790-3ef2-4cb5-b10d-fa2bed4b2d81",
+              "index": 5,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
           "id": "5596e91a-e336-4f26-b6da-19858be7ab67",
           "identifier": [
             "Magic Cell"
@@ -17107,6 +17214,60 @@
                     [
                       0,
                       65535
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer X (raw)",
+              "id": "5a6efdd1-164d-453e-9596-47523556a01f",
+              "index": 4,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer Y (raw)",
+              "id": "1d90dc6a-5ebe-43cd-aab9-fdc340b838a6",
+              "index": 5,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "description": "Accelerometer Z (raw)",
+              "id": "ff0a92c6-e5b4-4bcf-9c24-371d053fbfc8",
+              "index": 6,
+              "input": {
+                "accelerometer": {
+                  "command": [
+                    "Subscribe"
+                  ],
+                  "value": [
+                    [
+                      -32768,
+                      32767
                     ]
                   ]
                 }

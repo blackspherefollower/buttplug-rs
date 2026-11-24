@@ -2,6 +2,14 @@ devices:
   - identifier: 
       name: "Magic Cell"
     expected_name: "MagicMotion Dante/Candy/Rise"
+device_init:
+  - !Commands
+      device_index: 0
+      commands:
+        - !Write
+          endpoint: generic1
+          data: [0x01, 0x00]
+          write_with_response: true
 device_commands:
   - !Messages
       device_index: 0
