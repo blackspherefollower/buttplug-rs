@@ -72,10 +72,7 @@ pub mod lovense;
 pub mod lovense_connect_service;
 pub mod lovenuts;
 pub mod luvmazer;
-pub mod magic_motion_v1;
-pub mod magic_motion_v2;
-pub mod magic_motion_v3;
-pub mod magic_motion_v4;
+pub mod magic_motion;
 pub mod mannuo;
 pub mod maxpro;
 pub mod meese;
@@ -349,19 +346,19 @@ pub fn get_default_protocol_map() -> HashMap<String, Arc<dyn ProtocolIdentifierF
   );
   add_to_protocol_map(
     &mut map,
-    magic_motion_v1::setup::MagicMotionV1IdentifierFactory::default(),
+    magic_motion::magic_motion_v1::setup::MagicMotionV1IdentifierFactory::default(),
   );
   add_to_protocol_map(
     &mut map,
-    magic_motion_v2::setup::MagicMotionV2IdentifierFactory::default(),
+    magic_motion::magic_motion_v2::setup::MagicMotionV2IdentifierFactory::default(),
   );
   add_to_protocol_map(
     &mut map,
-    magic_motion_v3::setup::MagicMotionV3IdentifierFactory::default(),
+    magic_motion::magic_motion_v3::setup::MagicMotionV3IdentifierFactory::default(),
   );
   add_to_protocol_map(
     &mut map,
-    magic_motion_v4::setup::MagicMotionV4IdentifierFactory::default(),
+    magic_motion::magic_motion_v4::setup::MagicMotionV4IdentifierFactory::default(),
   );
   add_to_protocol_map(&mut map, mannuo::setup::ManNuoIdentifierFactory::default());
   add_to_protocol_map(&mut map, maxpro::setup::MaxproIdentifierFactory::default());

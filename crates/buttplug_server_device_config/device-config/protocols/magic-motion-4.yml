@@ -32,6 +32,34 @@ configurations:
 - identifier:
   - Kegel Coach
   name: MagicMotion Kegel Coach
+  features:
+  - id: a5d96468-9ff7-4027-b7c0-52a61ccf35b6
+    output:
+      vibrate:
+        value:
+        - 0
+        - 100
+    index: 0
+  - description: battery Level
+    id: 3c6e6441-f269-4ad3-b346-02a36fdd4e63
+    input:
+      battery:
+        value:
+        - - 0
+          - 100
+        command:
+        - Read
+    index: 1
+  - description: Pressure (raw)
+    id: 3d057149-8f57-4ca8-a5f7-6c04a2c481e2
+    input:
+      pressure:
+        value:
+        - - 0
+          - 510
+        command:
+        - Subscribe
+    index: 2
   id: 2ecd285e-9109-403c-b38f-3784629bd7de
 - identifier:
   - Magic Lotos
@@ -119,3 +147,5 @@ communication:
         tx: 78667579-a914-49a4-8333-aa3c0cd8fedc
       '0000180f-0000-1000-8000-00805f9b34fb':
         rxblebattery: 00002a19-0000-1000-8000-00805f9b34fb
+      '6f468792-f91f-11e3-a847-b2227cce2b54':
+        rxpressure: 6f468bfc-f91f-11e3-a847-b2227cce2b54
