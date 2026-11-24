@@ -217,6 +217,32 @@ configurations:
 - identifier:
   - Magic Wand
   name: MagicMotion Wand
+  features:
+  - id: 7eae4ef8-cd37-47e0-8861-f6395a668fe7
+    output:
+      vibrate:
+        value:
+        - 0
+        - 100
+    index: 0
+  - description: battery Level
+    id: 4d1941d7-224b-4178-9206-39e6844cac25
+    input:
+      battery:
+        value:
+        - - 0
+          - 100
+        command:
+        - Read
+    index: 1
+  - description: Heat (0=off, 1-5=38-42C)
+    id: e773ea59-fa44-49d9-a69f-db35645fb283
+    output:
+      temperature:
+        value:
+        - 0
+        - 5
+    index: 2
   id: 91c15cc1-3021-44fb-a64d-3231c007705a
 - identifier:
   - Magic Fugu
@@ -446,3 +472,8 @@ communication:
         rxaccel: 6f468cfc-f91f-11e3-a847-b2227cce2b54
         generic0: 6f468dfc-f91f-11e3-a847-b2227cce2b54
         generic1: 6f468efc-f91f-11e3-a847-b2227cce2b54
+      # Magic Wand heat: levels 1-5 map to 38-42C via generic2, key mode via generic3 (0=heat, 1=vibrate).
+      49387d0b-4eab-45db-82ac-e9eee66b2178:
+        generic2: f5354b61-6d97-45ca-84a0-93489c672fb4
+      9aa156db-e60b-45c8-ac72-5056cb595753:
+        generic3: b6ee430a-b86a-494c-9798-6a607a17488f

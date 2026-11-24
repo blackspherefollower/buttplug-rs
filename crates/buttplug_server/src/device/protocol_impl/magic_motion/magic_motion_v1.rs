@@ -14,7 +14,7 @@ use std::sync::{
   Arc,
   atomic::{AtomicI32, Ordering},
 };
-use uuid::Uuid;
+use uuid::{Uuid, uuid};
 
 use crate::device::{
   hardware::{Hardware, HardwareCommand, HardwareReadCmd, HardwareWriteCmd},
@@ -40,6 +40,14 @@ use super::magic_motion_input::{
   pressure_subscriptions,
   select_event_streams,
 };
+
+// Magic Wand heat is exposed as 0=off, 1-5=38-42C, matching the app's temperature choices.
+const MAGIC_WAND_HEAT_MIN_LEVEL: i32 = 1;
+const MAGIC_WAND_HEAT_MAX_LEVEL: i32 = 5;
+const MAGIC_WAND_HEAT_MIN_C: i32 = 38;
+const MAGIC_WAND_HEAT_MAX_C: i32 = 42;
+const MAGIC_WAND_HEAT_TEMP_UUID: Uuid = uuid!("72c33361-055c-4c95-901b-247e48c138cb");
+const MAGIC_WAND_HEAT_TEMP_CTRL_UUID: Uuid = uuid!("e2fb944f-36d2-4fa3-a932-25b9722cb3d9");
 
 pub mod setup {
   use crate::device::protocol::{ProtocolIdentifier, ProtocolIdentifierFactory};
@@ -221,6 +229,54 @@ impl ProtocolHandler for MagicMotionV1 {
     ])
   }
 
+  fn handle_output_temperature_cmd(
+    &self,
+    _feature_index: u32,
+    _feature_id: Uuid,
+    level: i32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    if level <= 0 {
+      // The app switches back to vibration mode rather than sending a dedicated heater-off write.
+      return Ok(vec![
+        HardwareWriteCmd::new(
+          &[MAGIC_WAND_HEAT_TEMP_CTRL_UUID],
+          Endpoint::Generic3,
+          vec![0x03, 0x04, 0x03, 0x01],
+          true,
+        )
+        .into(),
+      ]);
+    }
+
+    let target_c = (MAGIC_WAND_HEAT_MIN_C
+      + level.clamp(MAGIC_WAND_HEAT_MIN_LEVEL, MAGIC_WAND_HEAT_MAX_LEVEL)
+      - MAGIC_WAND_HEAT_MIN_LEVEL)
+      .min(MAGIC_WAND_HEAT_MAX_C);
+    let target_tenths = (target_c * 10) as u16;
+
+    Ok(vec![
+      HardwareWriteCmd::new(
+        &[MAGIC_WAND_HEAT_TEMP_UUID],
+        Endpoint::Generic2,
+        vec![
+          0x03,
+          (target_tenths & 0xff) as u8,
+          (target_tenths >> 8) as u8,
+          0x1e,
+        ],
+        true,
+      )
+      .into(),
+      HardwareWriteCmd::new(
+        &[MAGIC_WAND_HEAT_TEMP_CTRL_UUID],
+        Endpoint::Generic3,
+        vec![0x03, 0x04, 0x03, 0x00],
+        true,
+      )
+      .into(),
+    ])
+  }
+
   fn handle_input_subscribe_cmd(
     &self,
     device_index: u32,
@@ -318,6 +374,73 @@ impl ProtocolHandler for MagicMotionV1 {
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  #[test]
+  fn test_magic_wand_heat_commands() {
+    let protocol = MagicMotionV1::new(MagicMotionPressureFormat::Single, [None, None, None]);
+    let feature_id = Uuid::parse_str("e773ea59-fa44-49d9-a69f-db35645fb283").unwrap();
+
+    // Level 1 is the low end of the app's range (38C).
+    assert_eq!(
+      protocol
+        .handle_output_temperature_cmd(2, feature_id, 1)
+        .unwrap(),
+      vec![
+        HardwareWriteCmd::new(
+          &[feature_id],
+          Endpoint::Generic2,
+          vec![0x03, 0x7c, 0x01, 0x1e],
+          false,
+        )
+        .into(),
+        HardwareWriteCmd::new(
+          &[feature_id],
+          Endpoint::Generic3,
+          vec![0x03, 0x04, 0x03, 0x00],
+          false,
+        )
+        .into(),
+      ]
+    );
+
+    // Level 5 is the high end of the app's range (42C).
+    assert_eq!(
+      protocol
+        .handle_output_temperature_cmd(2, feature_id, 5)
+        .unwrap(),
+      vec![
+        HardwareWriteCmd::new(
+          &[feature_id],
+          Endpoint::Generic2,
+          vec![0x03, 0xa4, 0x01, 0x1e],
+          false,
+        )
+        .into(),
+        HardwareWriteCmd::new(
+          &[feature_id],
+          Endpoint::Generic3,
+          vec![0x03, 0x04, 0x03, 0x00],
+          false,
+        )
+        .into(),
+      ]
+    );
+
+    assert_eq!(
+      protocol
+        .handle_output_temperature_cmd(2, feature_id, 0)
+        .unwrap(),
+      vec![
+        HardwareWriteCmd::new(
+          &[feature_id],
+          Endpoint::Generic3,
+          vec![0x03, 0x04, 0x03, 0x01],
+          false,
+        )
+        .into()
+      ]
+    );
+  }
 
   #[test]
   fn test_counter_totals_are_cumulative() {
