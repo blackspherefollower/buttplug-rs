@@ -5,21 +5,30 @@
 // Licensed under the BSD 3-Clause license. See LICENSE file in the project root
 // for full license information.
 
-use uuid::Uuid;
-
 use crate::device::{
   hardware::{HardwareCommand, HardwareWriteCmd},
-  protocol::{ProtocolHandler, generic_protocol_setup},
+  protocol::{ProtocolHandler, ProtocolKeepaliveStrategy, generic_protocol_setup},
 };
 use buttplug_core::errors::ButtplugDeviceError;
 use buttplug_server_device_config::Endpoint;
+use std::time::Duration;
+use uuid::Uuid;
 
-generic_protocol_setup!(MagicMotionV3, "magic-motion-3");
+generic_protocol_setup!(MizzZeeV4, "mizzzee-v4");
+
+// Time between MizzZee v4 update commands, in milliseconds.
+const MIZZZEE4_COMMAND_DELAY_MS: u64 = 300;
 
 #[derive(Default)]
-pub struct MagicMotionV3 {}
+pub struct MizzZeeV4 {}
 
-impl ProtocolHandler for MagicMotionV3 {
+impl ProtocolHandler for MizzZeeV4 {
+  fn keepalive_strategy(&self) -> ProtocolKeepaliveStrategy {
+    ProtocolKeepaliveStrategy::RepeatLastPacketStrategyWithTiming(Duration::from_millis(
+      MIZZZEE4_COMMAND_DELAY_MS,
+    ))
+  }
+
   fn handle_output_vibrate_cmd(
     &self,
     _feature_index: u32,
@@ -30,21 +39,12 @@ impl ProtocolHandler for MagicMotionV3 {
       HardwareWriteCmd::new(
         &[feature_id],
         Endpoint::Tx,
-        vec![
-          0x0b,
-          0xff,
-          0x04,
-          0x0a,
-          0x46,
-          0x46,
-          0x00,
-          0x04,
-          0x08,
-          speed as u8,
-          0x64,
-          0x00,
-        ],
-        false,
+        if speed == 0 {
+          vec![0xA1, 0x0B, 0xAC]
+        } else {
+          vec![0xA2, speed as u8, 0xA2 + speed as u8]
+        },
+        true,
       )
       .into(),
     ])

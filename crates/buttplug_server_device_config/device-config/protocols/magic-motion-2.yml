@@ -139,3 +139,5 @@ communication:
         tx: 78667579-a914-49a4-8333-aa3c0cd8fedc
       '0000180f-0000-1000-8000-00805f9b34fb':
         rxblebattery: 00002a19-0000-1000-8000-00805f9b34fb
+      '6f468792-f91f-11e3-a847-b2227cce2b54':
+        rxpressure: 6f468bfc-f91f-11e3-a847-b2227cce2b54

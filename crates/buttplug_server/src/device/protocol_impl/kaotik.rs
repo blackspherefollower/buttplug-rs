@@ -94,4 +94,29 @@ impl ProtocolHandler for Kaotik {
       .into(),
     ])
   }
+
+  fn handle_output_led_cmd(
+    &self,
+    _feature_index: u32,
+    feature_id: Uuid,
+    level: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    Ok(vec![
+      HardwareWriteCmd::new(
+        &[feature_id],
+        Endpoint::Tx,
+        vec![
+          0x55,
+          0xa0,
+          if level == 0 { 0x00 } else { 0x01 },
+          level as u8,
+          0x00,
+          0x00,
+          0x00,
+        ],
+        false,
+      )
+      .into(),
+    ])
+  }
 }

@@ -11,6 +11,10 @@ use std::sync::{
 };
 
 use async_trait::async_trait;
+use futures::{
+  FutureExt,
+  future::{self, BoxFuture},
+};
 use uuid::{Uuid, uuid};
 
 use crate::device::{
@@ -22,10 +26,18 @@ use crate::device::{
     generic_protocol_initializer_setup,
   },
 };
-use buttplug_core::errors::ButtplugDeviceError;
+use buttplug_core::{errors::ButtplugDeviceError, message::InputType};
 use buttplug_server_device_config::Endpoint;
 use buttplug_server_device_config::ServerDeviceDefinition;
 use buttplug_server_device_config::{ProtocolCommunicationSpecifier, UserDeviceIdentifier};
+
+use super::magic_motion_input::{
+  MagicMotionInputEventStream,
+  MagicMotionInputSubscriptions,
+  MagicMotionPressureFormat,
+  pressure_subscriptions,
+};
+
 const MAGICMOTIONV4_PROTOCOL_UUID: Uuid = uuid!("d4d62d09-c3e1-44c9-8eba-caa15de5b2a7");
 
 generic_protocol_initializer_setup!(MagicMotionV4, "magic-motion-4");
@@ -48,6 +60,7 @@ impl ProtocolInitializer for MagicMotionV4Initializer {
 
 pub struct MagicMotionV4 {
   current_commands: Vec<AtomicU8>,
+  pressure: MagicMotionInputSubscriptions<2>,
 }
 
 impl MagicMotionV4 {
@@ -56,6 +69,7 @@ impl MagicMotionV4 {
       current_commands: std::iter::repeat_with(AtomicU8::default)
         .take(num_vibrators as usize)
         .collect(),
+      pressure: pressure_subscriptions(MagicMotionPressureFormat::Single),
     }
   }
 }
@@ -99,5 +113,46 @@ impl ProtocolHandler for MagicMotionV4 {
     Ok(vec![
       HardwareWriteCmd::new(&[MAGICMOTIONV4_PROTOCOL_UUID], Endpoint::Tx, data, true).into(),
     ])
+  }
+
+  fn handle_input_subscribe_cmd(
+    &self,
+    device_index: u32,
+    device: Arc<Hardware>,
+    feature_index: u32,
+    feature_id: Uuid,
+    sensor_type: InputType,
+  ) -> BoxFuture<'_, Result<(), ButtplugDeviceError>> {
+    match sensor_type {
+      InputType::Pressure => {
+        self
+          .pressure
+          .subscribe(device_index, device, feature_index, feature_id)
+      }
+      _ => future::ready(Err(ButtplugDeviceError::UnhandledCommand(format!(
+        "Magic Motion V4 input subscribe not implemented for {sensor_type}"
+      ))))
+      .boxed(),
+    }
+  }
+
+  fn handle_input_unsubscribe_cmd(
+    &self,
+    device: Arc<Hardware>,
+    feature_index: u32,
+    feature_id: Uuid,
+    sensor_type: InputType,
+  ) -> BoxFuture<'_, Result<(), ButtplugDeviceError>> {
+    match sensor_type {
+      InputType::Pressure => self.pressure.unsubscribe(device, feature_index, feature_id),
+      _ => future::ready(Err(ButtplugDeviceError::UnhandledCommand(format!(
+        "Magic Motion V4 input unsubscribe not implemented for {sensor_type}"
+      ))))
+      .boxed(),
+    }
+  }
+
+  fn event_stream(&self) -> MagicMotionInputEventStream {
+    self.pressure.event_stream()
   }
 }

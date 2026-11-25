@@ -9,6 +9,13 @@ defaults:
         - 0
         - 10
     index: 0
+  - id: '9d4cbaef-ae9d-4464-a7ba-b3db95da9ed0'
+    output:
+      led:
+        value:
+          - 0
+          - 10
+    index: 1
   id: 9b6465c3-73dc-4668-9e0c-80585f6c9fad
 configurations:
   - identifier:
@@ -37,6 +44,13 @@ configurations:
               - 0
               - 10
         index: 1
+      - id: '2d052895-5927-438e-be57-1238ffed9eb2'
+        output:
+          led:
+            value:
+              - 0
+              - 10
+        index: 2
     id: d6ed5904-f9e6-49ed-8d89-1b257cf01bf6
   - identifier:
       - The Cocoon
@@ -56,6 +70,13 @@ configurations:
               - 0
               - 10
         index: 1
+      - id: 'ed769215-c0ca-4a6d-9b11-99788720cf4d'
+        output:
+          led:
+            value:
+              - 0
+              - 10
+        index: 2
     id: c04b75cb-0aca-4a57-b6b5-d527fa84d66e
 communication:
 - btle:

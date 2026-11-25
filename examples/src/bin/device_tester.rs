@@ -15,7 +15,7 @@ use buttplug_client::{
   ButtplugClientEvent,
 };
 use buttplug_client_in_process::ButtplugInProcessClientConnectorBuilder;
-use buttplug_core::message::InputType::Pressure;
+use buttplug_core::message::InputType::{Accelerometer, Counter, Pressure};
 use buttplug_core::message::{ButtplugServerMessageV4, InputTypeReading, OutputType};
 use buttplug_server::ButtplugServerBuilder;
 use buttplug_server::device::ServerDeviceManagerBuilder;
@@ -139,6 +139,24 @@ async fn device_tester() {
                   b.data()
                 )
               }
+              InputTypeReading::Accelerometer(b) => {
+                info!(
+                  "{} ({}) Accelerometer reading (feature {}): {}",
+                  dev_name,
+                  dev_index,
+                  ir.feature_index(),
+                  b.data()
+                )
+              }
+              InputTypeReading::Counter(b) => {
+                info!(
+                  "{} ({}) Counter reading (feature {}): {}",
+                  dev_name,
+                  dev_index,
+                  ir.feature_index(),
+                  b.data()
+                )
+              }
             },
             _ => {
               warn!("[!] Unhandled message: {:?}", m);
@@ -155,6 +173,24 @@ async fn device_tester() {
     dev.device_features().iter().for_each(|(_, feature)| {
       if let Some(_) = feature.feature().get_input(Pressure) {
         cmds.push(feature.run_input_subscribe(Pressure));
+        println!(
+          "{} ({}) should start reporting pressure on feature {}!",
+          dev.name(),
+          dev.index(),
+          feature.feature_index()
+        );
+      }
+      if let Some(_) = feature.feature().get_input(Accelerometer) {
+        cmds.push(feature.run_input_subscribe(Accelerometer));
+        println!(
+          "{} ({}) should start reporting pressure on feature {}!",
+          dev.name(),
+          dev.index(),
+          feature.feature_index()
+        );
+      }
+      if let Some(_) = feature.feature().get_input(Counter) {
+        cmds.push(feature.run_input_subscribe(Counter));
         println!(
           "{} ({}) should start reporting pressure on feature {}!",
           dev.name(),
