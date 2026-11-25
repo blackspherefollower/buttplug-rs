@@ -1,7 +1,7 @@
 {
   "version": {
     "major": 5,
-    "minor": 109
+    "minor": 111
   },
   "protocols": {
     "activejoy": {
@@ -18201,6 +18201,74 @@
           }
         ],
         "id": "4d54f81c-e31f-469a-a17a-ea1d4058a037",
+        "name": "Mizz Zee Device"
+      }
+    },
+    "mizzzee-v4": {
+      "communication": [
+        {
+          "btle": {
+            "names": [
+              "XM_B60"
+            ],
+            "services": {
+              "0000fff0-0000-1000-8000-00805f9b34fb": {
+                "tx": "0000fff2-0000-1000-8000-00805f9b34fb"
+              }
+            }
+          }
+        }
+      ],
+      "defaults": {
+        "features": [
+          {
+            "id": "ffec0aa6-ac83-469f-a0af-aea6a7c907ec",
+            "index": 0,
+            "output": {
+              "vibrate": {
+                "value": [
+                  0,
+                  12
+                ]
+              }
+            }
+          }
+        ],
+        "id": "0fcb78a6-be9f-41b4-9871-b1f95fb59b77",
+        "name": "Mizz Zee Device"
+      }
+    },
+    "mizzzee-v5": {
+      "communication": [
+        {
+          "btle": {
+            "names": [
+              "ANKNI QTB-Z"
+            ],
+            "services": {
+              "0000dddd-0000-1000-8000-00805f9b34fb": {
+                "tx": "0000ddd1-0000-1000-8000-00805f9b34fb"
+              }
+            }
+          }
+        }
+      ],
+      "defaults": {
+        "features": [
+          {
+            "id": "1597d2be-ee81-41cd-9ce5-e9fe461fb0f2",
+            "index": 0,
+            "output": {
+              "vibrate": {
+                "value": [
+                  0,
+                  40
+                ]
+              }
+            }
+          }
+        ],
+        "id": "40e52296-dee4-4942-b027-1d37b118e231",
         "name": "Mizz Zee Device"
       }
     },

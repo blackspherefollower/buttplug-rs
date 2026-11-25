@@ -1,0 +1,19 @@
+---
+defaults:
+  name: Mizz Zee Device
+  features:
+  - id: ffec0aa6-ac83-469f-a0af-aea6a7c907ec
+    output:
+      vibrate:
+        value:
+        - 0
+        - 12
+    index: 0
+  id: 0fcb78a6-be9f-41b4-9871-b1f95fb59b77
+communication:
+- btle:
+    names:
+    - XM_B60
+    services:
+      0000fff0-0000-1000-8000-00805f9b34fb:
+        tx: 0000fff2-0000-1000-8000-00805f9b34fb

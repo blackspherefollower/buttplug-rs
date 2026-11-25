@@ -1,0 +1,19 @@
+---
+defaults:
+  name: Mizz Zee Device
+  features:
+  - id: 1597d2be-ee81-41cd-9ce5-e9fe461fb0f2
+    output:
+      vibrate:
+        value:
+        - 0
+        - 40
+    index: 0
+  id: 40e52296-dee4-4942-b027-1d37b118e231
+communication:
+- btle:
+    names:
+    - ANKNI QTB-Z
+    services:
+      0000dddd-0000-1000-8000-00805f9b34fb:
+        tx: 0000ddd1-0000-1000-8000-00805f9b34fb
