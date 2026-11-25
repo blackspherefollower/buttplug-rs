@@ -72,13 +72,10 @@ impl MagicMotionV2 {
       pressure: pressure_subscriptions(format),
     }
   }
-}
 
-impl ProtocolHandler for MagicMotionV2 {
-  fn handle_output_vibrate_cmd(
+  fn handle_output_cmd(
     &self,
     feature_index: u32,
-    _feature_id: Uuid,
     speed: u32,
   ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
     self.speeds[feature_index as usize].store(speed as u8, Ordering::Relaxed);
@@ -104,6 +101,25 @@ impl ProtocolHandler for MagicMotionV2 {
     Ok(vec![
       HardwareWriteCmd::new(&[MAGIC_MOTION_2_PROTOCOL_UUID], Endpoint::Tx, data, false).into(),
     ])
+  }
+}
+
+impl ProtocolHandler for MagicMotionV2 {
+  fn handle_output_vibrate_cmd(
+    &self,
+    feature_index: u32,
+    _feature_id: Uuid,
+    speed: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    self.handle_output_cmd(feature_index, speed)
+  }
+  fn handle_output_oscillate_cmd(
+    &self,
+    feature_index: u32,
+    _feature_id: Uuid,
+    speed: u32,
+  ) -> Result<Vec<HardwareCommand>, ButtplugDeviceError> {
+    self.handle_output_cmd(feature_index, speed)
   }
 
   fn handle_input_subscribe_cmd(
